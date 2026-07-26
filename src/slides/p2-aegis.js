@@ -157,7 +157,7 @@ function pipeline(pptx) {
     comp.ops.forEach((op, j) => {
       K.text(s, op, {
         x: x + 0.16, y: top + 0.94 + j * 0.33, w: boxW - 0.32, h: 0.28,
-        fontFace: 'Consolas', fontSize: 9.5, color: C.ink,
+        fontFace: 'Courier New', fontSize: 9.5, color: C.ink,
       });
     });
   });
@@ -166,9 +166,8 @@ function pipeline(pptx) {
   const labels = ['findings', 'fix\nproposal', 'approved\nchange'];
   for (let i = 0; i < 3; i++) {
     const x1 = G.M + i * (boxW + gap) + boxW;
-    s.addShape('line', {
-      x: x1 + 0.06, y: top + boxH / 2 + 0.18, w: gap - 0.12, h: 0,
-      line: { color: C.ink, width: 1.5, endArrowType: 'triangle' },
+    K.connector(s, {
+      x: x1 + 0.06, y: top + boxH / 2 + 0.18, len: gap - 0.12, dir: 'right', color: C.ink,
     });
     K.text(s, labels[i], {
       x: x1, y: top + boxH / 2 - 0.44, w: gap, h: 0.54, align: 'center', valign: 'bottom',
@@ -179,9 +178,10 @@ function pipeline(pptx) {
   // dashed «verify» return loop: WATCHTOWER back to AEGIS
   const loopY = top + boxH + 0.46;
   const xEnd = centres[3], xStart = centres[0];
-  s.addShape('line', { x: xEnd, y: top + boxH, w: 0, h: loopY - (top + boxH), line: { color: C.red, width: 1.5, dashType: 'dash' } });
-  s.addShape('line', { x: xStart, y: loopY, w: xEnd - xStart, h: 0, line: { color: C.red, width: 1.5, dashType: 'dash' } });
-  s.addShape('line', { x: xStart, y: top + boxH, w: 0, h: loopY - (top + boxH), line: { color: C.red, width: 1.5, dashType: 'dash', endArrowType: 'triangle', beginArrowType: 'triangle' } });
+  const drop = loopY - (top + boxH);
+  K.connector(s, { x: xEnd, y: top + boxH, len: drop, dir: 'down', color: C.red, head: false, dash: true });
+  K.connector(s, { x: xStart, y: loopY, len: xEnd - xStart, dir: 'left', color: C.red, head: false, dash: true });
+  K.connector(s, { x: xStart, y: top + boxH, len: drop, dir: 'up', color: C.red, head: true });
   K.text(s, '«verify»  —  only AEGIS may mark a finding RESOLVED', {
     x: xStart, y: loopY + 0.06, w: xEnd - xStart, h: 0.24, align: 'center',
     fontFace: 'Montserrat SemiBold', fontSize: 9.5, color: C.red,

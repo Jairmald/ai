@@ -75,7 +75,7 @@ const T = {
   statLg:    { fontFace: F.black,   fontSize: 44, charSpacing: -1.5, color: C.red },
   statMd:    { fontFace: F.black,   fontSize: 30, charSpacing: -1.0, color: C.red },
   cardTitle: { fontFace: F.semi,    fontSize: 13, charSpacing: 0.2,  color: C.inkDeep },
-  mono:      { fontFace: 'Consolas', fontSize: 10, charSpacing: 0,   color: C.ink },
+  mono:      { fontFace: 'Courier New', fontSize: 10, charSpacing: 0,   color: C.ink },
 };
 
 // ---------------------------------------------------------------------------

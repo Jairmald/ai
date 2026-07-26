@@ -18,13 +18,28 @@ bash tools/render.sh          # render every slide to out/render/slide-NN.png
 Requires Node, plus Python with `cairosvg`, `pillow` and `pymupdf`, and
 LibreOffice **with Impress** (`libreoffice-impress`) for rendering previews.
 
-Fonts: the deck uses real **Montserrat**. `tools/` expects the static weights to
-be installed — they are instanced from the Google variable font:
+## Fonts — install these before opening the deck
+
+The deck is set in real **Montserrat** and PowerPoint files do **not** carry
+fonts with them. On a machine without Montserrat installed, every heading falls
+back to a default sans: the layout still holds, but the deck loses its entire
+weight hierarchy and looks flat.
+
+The five weights it uses ship in `assets/fonts/`. Install all of them:
+
+- **macOS** — select all five `.ttf` files, open, click *Install Font*
+- **Windows** — select all five, right-click, *Install for all users*
+
+They register as the families `Montserrat`, `Montserrat Medium`,
+`Montserrat SemiBold` and `Montserrat ExtraBold` — the same names a standard
+Google Fonts desktop install produces, so either route works.
+
+The files are instanced from the Google variable font:
 
 ```bash
 curl -sSL -o Montserrat.ttf \
   "https://raw.githubusercontent.com/google/fonts/main/ofl/montserrat/Montserrat%5Bwght%5D.ttf"
-# then instance Regular/Medium/SemiBold/Bold/ExtraBold into ~/.fonts with fontTools
+# then instance Regular/Medium/SemiBold/Bold/ExtraBold with fontTools
 ```
 
 ## Layout
@@ -66,6 +81,13 @@ distorted.
 - **Artwork is placed by width only.** `K.placeImage()` derives height from the
   asset's real pixel size. Never hardcode an aspect ratio in a slide file — a
   stale ratio silently pushes content off the page.
+- **Draw connectors with `K.connector()`, never `addShape('line')`.** A
+  horizontal or vertical line serialises to a zero-height/zero-width extent,
+  which PowerPoint frequently drops or misdraws even though LibreOffice
+  tolerates it. `connector()` builds shafts from rectangles and heads from
+  triangles, so both renderers agree.
+- **Stick to fonts that exist.** Montserrat for everything, `Courier New` for
+  the monospace compartments. Avoid Consolas and other platform-specific faces.
 - **Titles must fit one line.** The accent rule sits at a fixed `y`; a title that
   wraps will collide with it.
 - **Numbers are verified.** Everything in `src/content.js` was checked against

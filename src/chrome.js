@@ -124,6 +124,56 @@ function contentSlide(pptx, { eyebrow: eb, title: tl, section, num, titleW = 11.
   return slide;
 }
 
+/**
+ * Connector drawn from a filled rectangle plus a triangular head.
+ *
+ * Deliberately avoids pptxgenjs `line` shapes: a horizontal or vertical line
+ * serialises to a zero-height/zero-width extent, which PowerPoint often drops
+ * or misdraws. Rectangles always have real extents, so these render the same
+ * everywhere.
+ *
+ * `dir` is one of 'right' | 'left' | 'up' | 'down'; `head` false draws a plain
+ * segment with no arrowhead.
+ */
+function connector(slide, { x, y, len, dir = 'right', color = C.ink, weight = 0.022, head = true, dash = false }) {
+  const HW = 0.1, HH = 0.13;            // arrowhead footprint
+  const horiz = dir === 'right' || dir === 'left';
+  const NONE = { type: 'none' };
+  const fill = { color };
+
+  // Shaft start offset: an arrowhead eats into whichever end it sits on.
+  const headSize = horiz ? HW : HH;
+  const shaft = Math.max(len - (head ? headSize : 0), 0.01);
+  const lead = head && (dir === 'left' || dir === 'up') ? headSize : 0;
+
+  /** One filled segment of the shaft, in the connector's direction. */
+  const seg = (off, length) => slide.addShape('rect', {
+    x: horiz ? x + off : x - weight / 2,
+    y: horiz ? y - weight / 2 : y + off,
+    w: horiz ? length : weight,
+    h: horiz ? weight : length,
+    fill, line: NONE,
+  });
+
+  if (dash) {
+    // Hand-built dashes: a stroked thin rect would outline all four sides.
+    const DASH = 0.075, GAP = 0.055;
+    for (let o = lead; o < lead + shaft; o += DASH + GAP) {
+      seg(o, Math.min(DASH, lead + shaft - o));
+    }
+  } else {
+    seg(lead, shaft);
+  }
+
+  if (!head) return;
+  const rotate = { right: 90, left: 270, down: 180, up: 0 }[dir];
+  slide.addShape('triangle', {
+    x: horiz ? (dir === 'right' ? x + len - HW : x) : x - HW / 2,
+    y: horiz ? y - HH / 2 : (dir === 'down' ? y + len - HH : y),
+    w: HW, h: HH, fill, line: NONE, rotate,
+  });
+}
+
 /** Big number + caption block. */
 function stat(slide, { value, label, x, y, w, valueStyle = T.statLg, labelStyle = T.caption, align = 'left', gap = 0.62 }) {
   text(slide, value, { x, y, w, h: gap, align, ...valueStyle });
@@ -132,5 +182,5 @@ function stat(slide, { value, label, x, y, w, valueStyle = T.statLg, labelStyle 
 
 module.exports = {
   img, text, eyebrow, title, rule, hairline, card, logo, footer, contentSlide, stat,
-  pngSize, logoAspect, placeImage,
+  pngSize, logoAspect, placeImage, connector,
 };
