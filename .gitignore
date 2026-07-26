@@ -2,3 +2,6 @@
 node_modules/
 out/render/
 assets/gen/
+
+out/diagrams/
+out/Deck-Diagrams.zip
