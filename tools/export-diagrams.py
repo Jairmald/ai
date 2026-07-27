@@ -15,6 +15,7 @@ Also writes a contact sheet and an INDEX.md.
 Usage: python3 tools/export-diagrams.py
 """
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -29,19 +30,22 @@ PPTX = os.path.join(ROOT, "out", "Internship_Exit_Presentation_Stewart.pptx")
 DPI = 300
 FONT_DIR = os.path.expanduser("~/.fonts")
 
+# Slide numbers here must track build.js. They are asserted against the deck's
+# own footer numbering by check_slide_numbers() below.
+#
 # Vector artwork: (order, slide, section, slug, asset-name, description)
 VECTOR = [
     (2, 6, "Project 01 — Image Management", "isometric-secure-image", "iso-machine",
      "Isometric stack: a base cloud image with three security layers and a shield crest."),
-    (5, 9, "Project 02 — AEGIS", "supply-chain-attack-flow", "supply-chain",
+    (6, 10, "Project 02 — AEGIS", "supply-chain-attack-flow", "supply-chain",
      "Attacker to poisoned package to public registry to every downstream project."),
-    (6, 10, "Project 02 — AEGIS", "packages-scanned-chart", "chart-packages",
-     "Bar chart: 82 / 3,024 / 2,651 packages scanned per validation run."),
-    (8, 14, "Project 03 — CVE-to-Patch", "match-rate-rings", "chart-match",
+    (7, 11, "Project 02 — AEGIS", "packages-scanned-chart", "chart-packages",
+     "Bar chart: 82 / 3,024 / 2,651 packages per run, from the earlier version."),
+    (10, 17, "Project 03 — CVE-to-Patch", "match-rate-rings", "chart-match",
      "Before/after proportion rings: 0% matched by hand, 100% automated."),
-    (10, 16, "Project 03 — CVE-to-Patch", "consolidation-waffle", "chart-consolidation",
+    (12, 19, "Project 03 — CVE-to-Patch", "consolidation-waffle", "chart-consolidation",
      "209 squares, one per real fix-action; the 46 in red became tickets."),
-    (11, 17, "Project 03 — CVE-to-Patch", "dashboard-mockup", "dashboard-mock",
+    (13, 20, "Project 03 — CVE-to-Patch", "dashboard-mockup", "dashboard-mock",
      "Concept dashboard tying Tenable, Kevlar, ServiceNow and Wiz into one view."),
 ]
 
@@ -53,11 +57,15 @@ NATIVE = [
      "3x3 grid of the nine required security tools, plus the gap callout."),
     (4, 7, "Project 01 — Image Management", "three-step-process", (0.75, 2.75, 12.58, 6.66),
      "Define the Tools / Define the Owners / Get It Adopted, plus the delivered band."),
-    (7, 11, "Project 02 — AEGIS", "aegis-uml-pipeline", (0.75, 2.68, 12.58, 5.62),
-     "UML component diagram: AEGIS, FORGE, LEDGER, WATCHTOWER and the verify loop."),
-    (9, 15, "Project 03 — CVE-to-Patch", "full-chain-flow", (0.75, 5.05, 12.58, 6.58),
+    (5, 8, "Project 01 — Image Management", "image-mgmt-next-steps", (0.75, 2.76, 12.58, 6.10),
+     "Adoption, owner handover, and a pre-deploy check."),
+    (8, 12, "Project 02 — AEGIS", "aegis-five-stage-pipeline", (0.75, 1.96, 12.58, 6.56),
+     "The core rule, stages SCAN/REACH/BLAST/REGRESS, and the gated FIX stage."),
+    (9, 14, "Project 02 — AEGIS", "aegis-next-steps", (0.75, 2.66, 12.58, 6.72),
+     "Unblock live lookups, read code structure, and get it installed elsewhere."),
+    (11, 18, "Project 03 — CVE-to-Patch", "full-chain-flow", (0.75, 5.05, 12.58, 6.58),
      "117 flaws to 209 fix-actions to newest-patch-only to 46 tickets."),
-    (12, 17, "Project 03 — CVE-to-Patch", "four-system-chain", (0.75, 3.30, 5.60, 6.70),
+    (14, 20, "Project 03 — CVE-to-Patch", "four-system-chain", (0.75, 3.30, 5.60, 6.70),
      "Tenable to Kevlar to ServiceNow to Wiz, with each system's role."),
 ]
 
@@ -72,6 +80,37 @@ def font(name, size):
     return ImageFont.truetype(p, size) if os.path.exists(p) else ImageFont.load_default()
 
 
+# Footer label expected on each slide, keyed by the section name used above.
+# Guards against the slide numbers here drifting out of sync with build.js.
+SECTION_FOOTER = {
+    "Internship Overview": "INTERNSHIP OVERVIEW",
+    "Project 01 — Image Management": "IMAGE MANAGEMENT PROGRAM",
+    "Project 02 — AEGIS": "AEGIS",
+    "Project 03 — CVE-to-Patch": "CVE-TO-PATCH AUTOMATION",
+}
+
+
+def _squash(s):
+    """Drop all whitespace — footer labels are letterspaced, so PDF extraction
+    breaks them into separate runs and a literal substring test would fail."""
+    return re.sub(r"\s+", "", s).upper()
+
+
+def check_slide_numbers(page_text):
+    """Fail loudly if a slide number no longer points at the expected section."""
+    bad = []
+    for _, slide, section, slug, *_ in VECTOR + NATIVE:
+        want = SECTION_FOOTER.get(section)
+        if want and _squash(want) not in _squash(page_text.get(slide, "")):
+            bad.append(f"  slide {slide} ({slug}): expected footer {want!r}")
+    if bad:
+        raise SystemExit(
+            "Slide numbers are out of sync with the deck:\n"
+            + "\n".join(bad)
+            + "\n\nUpdate VECTOR/NATIVE in this file to match build.js."
+        )
+
+
 def render_slides():
     """Rasterize the deck once at DPI; return {slide_number: PIL.Image}."""
     render_dir = os.path.join(ROOT, "out", "_diagram_pdf")
@@ -83,12 +122,14 @@ def render_slides():
     )
     pdf = os.path.join(render_dir, os.path.basename(PPTX).replace(".pptx", ".pdf"))
     doc = fitz.open(pdf)
-    pages = {}
+    pages, text = {}, {}
     for i, page in enumerate(doc, 1):
         pm = page.get_pixmap(dpi=DPI)
         pages[i] = Image.frombytes("RGB", (pm.width, pm.height), pm.samples)
+        text[i] = page.get_text()
     doc.close()
     shutil.rmtree(render_dir, ignore_errors=True)
+    check_slide_numbers(text)
     return pages
 
 
