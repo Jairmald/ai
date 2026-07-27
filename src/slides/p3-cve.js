@@ -1,13 +1,13 @@
 /** Slides 12-17: Project 03 — CVE-to-Patch Automation. The headliner. */
 const { C, T, G, SHADOW, ON_RED, ON_INK } = require('../tokens');
 const K = require('../chrome');
-const { PROJECTS } = require('../content');
+const { PROJECTS, NOTES } = require('../content');
 
 const P = PROJECTS.three;
 
 function divider(pptx) {
   return require('./divider').divider(pptx, {
-    num: '03', label: P.label, blurb: P.blurb, slideNum: 15,
+    num: '03', label: P.label, blurb: P.blurb, slideNum: 16,
   });
 }
 
@@ -19,7 +19,7 @@ function problem(pptx) {
     eyebrow: 'Project 03  ·  The Problem',
     title: 'Every flaw needed its own patch, found by hand',
     section: 'CVE-to-Patch Automation',
-    num: 16,
+    num: 17,
   });
 
   // left — the headline number, with the selection criteria made explicit
@@ -38,7 +38,7 @@ function problem(pptx) {
 
   const defs = [
     ['WHAT A "KNOWN FLAW" IS', 'A publicly published weakness in software that attackers already know about. Each one has a matching fix released by the vendor.'],
-    ['WHY IT IS SLOW', 'For each flaw: find Microsoft\'s advisory, work out which products and versions are affected, locate the matching patch for each one, then check it against the real machine inventory. Then repeat.'],
+    ['THE BOTTLENECK', 'Microsoft publishes the flaw and the fix in separate documents. Someone has to cross-reference them by hand, once per flaw, then check it against the real machine list. Do that 117 times and it is two days of work.'],
   ];
   let y = 2.28;
   defs.forEach(([h, d]) => {
@@ -66,6 +66,7 @@ function problem(pptx) {
     fontFace: 'Montserrat Medium', fontSize: 10, color: ON_INK.muted, lineSpacingMultiple: 1.2,
   });
 
+  s.addNotes(NOTES.p3Problem);
   return s;
 }
 
@@ -77,7 +78,7 @@ function match(pptx) {
     eyebrow: 'Project 03  ·  The Result',
     title: 'From about two days of work to twelve seconds',
     section: 'CVE-to-Patch Automation',
-    num: 17,
+    num: 18,
   });
 
   K.text(s, 'I built a Python script that matches each flaw to its Microsoft patch automatically, using Microsoft\'s own public security feeds — no API key, no manual searching.', {
@@ -112,6 +113,7 @@ function match(pptx) {
     y += 1.36;
   });
 
+  s.addNotes(NOTES.p3Match);
   return s;
 }
 
@@ -123,7 +125,7 @@ function noAction(pptx) {
     eyebrow: 'Project 03  ·  The Finding',
     title: '52 of the 117 needed no action at all',
     section: 'CVE-to-Patch Automation',
-    num: 18,
+    num: 19,
   });
 
   K.text(s, 'Cross-referencing the matched patches against the real fleet turned up something better than a faster process: a large share of the work did not need doing in the first place.', {
@@ -169,9 +171,10 @@ function noAction(pptx) {
 
   K.text(s, [
     { text: 'Why: ', options: { fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep } },
-    { text: 'Windows updates roll forward, so ordinary monthly patching had already carried every current machine past the fix for those 52. They were closed with no ticket and no work.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
+    { text: 'routine monthly patching had already carried every machine past the fix for those 52 — so the patching process is working better than we assumed. We were tracking work that was already done.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
   ], { x: G.M, y: 6.22, w: G.contentW, h: 0.34 });
 
+  s.addNotes(NOTES.p3NoAction);
   return s;
 }
 
@@ -183,7 +186,7 @@ function granularity(pptx) {
     eyebrow: 'Project 03  ·  Going Deeper',
     title: 'Matching the flaws was only half the job',
     section: 'CVE-to-Patch Automation',
-    num: 19,
+    num: 20,
   });
 
   const cardW = 5.66, gap = 0.31, top = 2.22, cardH = 2.42;
@@ -254,6 +257,7 @@ function granularity(pptx) {
     }
   });
 
+  s.addNotes(NOTES.p3Granularity);
   return s;
 }
 
@@ -265,7 +269,7 @@ function roi(pptx) {
     eyebrow: 'Project 03  ·  The Payoff',
     title: '209 rows became 46 tickets',
     section: 'CVE-to-Patch Automation',
-    num: 20,
+    num: 21,
   });
 
   // headline stat row
@@ -323,12 +327,12 @@ function future(pptx) {
     eyebrow: 'Project 03  ·  What Comes Next',
     title: 'Four systems, one screen',
     section: 'CVE-to-Patch Automation',
-    num: 21,
+    num: 22,
   });
 
   const x0 = G.M, w = 4.55;
-  K.text(s, 'Today these four systems each hold one piece of the story, and someone has to stitch them together by hand. The next step is a single view where the whole path is visible at once.', {
-    x: x0, y: 2.2, w, h: 1.0, ...T.body, color: C.muted, lineSpacingMultiple: 1.28,
+  K.text(s, 'Today these four systems each hold one piece of the story, and someone stitches them together by hand. A single view would close that gap.', {
+    x: x0, y: 2.2, w, h: 0.8, ...T.body, color: C.muted, lineSpacingMultiple: 1.28,
   });
 
   const chain = [
@@ -363,10 +367,10 @@ function future(pptx) {
     y += 0.72;
   });
 
-  K.text(s, 'Flaw found → fix identified → ticket opened → patch confirmed, all in one place.', {
-    x: x0, y: 6.16, w, h: 0.5,
-    fontFace: 'Montserrat SemiBold', fontSize: 11, color: C.red, lineSpacingMultiple: 1.2,
-  });
+  K.text(s, [
+    { text: 'To be clear: ', options: { fontFace: 'Montserrat SemiBold', fontSize: 11, color: C.inkDeep } },
+    { text: 'the scripts are done and tested. The dashboard is optional follow-up work for whoever picks up the pipeline — not a dependency.', options: { fontFace: 'Montserrat', fontSize: 11, color: C.muted } },
+  ], { x: x0, y: 6.06, w, h: 0.62, lineSpacingMultiple: 1.2 });
 
   // dashboard mockup
   const artX = 5.86, artW = G.W - G.M - artX, artY = 2.3;
@@ -375,6 +379,7 @@ function future(pptx) {
     x: artX, y: artY + artH + 0.16, w: artW, h: 0.26, align: 'center', ...T.caption, color: C.hair,
   });
 
+  s.addNotes(NOTES.p3Future);
   return s;
 }
 

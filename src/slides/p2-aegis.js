@@ -1,13 +1,13 @@
 /** Slides 9-14: Project 02 — AEGIS, supply-chain defense. */
 const { C, T, G, SHADOW, ON_RED, ON_INK } = require('../tokens');
 const K = require('../chrome');
-const { PROJECTS } = require('../content');
+const { PROJECTS, NOTES } = require('../content');
 
 const P = PROJECTS.two;
 
 function divider(pptx) {
   return require('./divider').divider(pptx, {
-    num: '02', label: P.label, blurb: P.blurb, slideNum: 9,
+    num: '02', label: P.label, blurb: P.blurb, slideNum: 10,
   });
 }
 
@@ -19,7 +19,7 @@ function problem(pptx) {
     eyebrow: 'Project 02  ·  The Problem',
     title: 'One poisoned package reaches everyone',
     section: 'AEGIS',
-    num: 10,
+    num: 11,
   });
 
   K.text(s, 'In a supply-chain attack, an attacker hides malicious code inside a legitimate, widely-used open-source package. Everyone who installs it inherits the compromise — including us. Real campaigns in 2025 and 2026 worked exactly this way, including a self-spreading family that reused each victim to infect the next.', {
@@ -52,11 +52,12 @@ function problem(pptx) {
   K.text(s, 'WHY EXISTING TOOLS WERE NOT ENOUGH', {
     x: G.M + 0.26, y: gy + 0.15, w: 8, h: 0.22, ...T.micro, color: C.red,
   });
-  K.text(s, 'Most scanners only say "you have a known flaw." They do not say whether our own code actually uses the flawed part — so teams cannot tell what is urgent and what is noise.', {
+  K.text(s, 'Most scanners cry wolf: "you have 500 flaws." But our code never touches most of them, so nobody can tell what is urgent. AEGIS separates signal from noise by checking whether our code actually calls the vulnerable part.', {
     x: G.M + 0.26, y: gy + 0.41, w: G.contentW - 0.55, h: 0.42,
     ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.18,
   });
 
+  s.addNotes(NOTES.p2Problem);
   return s;
 }
 
@@ -68,7 +69,7 @@ function built(pptx) {
     eyebrow: 'Project 02  ·  What I Built',
     title: 'A scanner that checks if the flaw is reachable',
     section: 'AEGIS',
-    num: 11,
+    num: 12,
   });
 
   // headline metric — explicitly attributed to the earlier version
@@ -85,7 +86,7 @@ function built(pptx) {
     ['Unknown is never "safe"',
      'If the tool cannot tell, it says so. It never reports a clean result it has not earned.'],
   ];
-  let by = 4.02;
+  let by = 3.86;
   bullets.forEach(([t, d]) => {
     s.addShape('ellipse', { x: G.M + 0.02, y: by + 0.08, w: 0.12, h: 0.12, fill: { color: C.red }, line: { type: 'none' } });
     K.text(s, t, {
@@ -95,17 +96,35 @@ function built(pptx) {
     K.text(s, d, {
       x: G.M + 0.28, y: by + 0.28, w: 4.05, h: 0.6, ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.2,
     });
-    by += 0.9;
+    by += 0.84;
   });
 
   // right — validation runs from that earlier version
   const cardX = 5.66, cardW = G.W - G.M - cardX;
-  K.card(s, { x: cardX, y: 2.26, w: cardW, h: 4.16, fill: C.white });
+  K.card(s, { x: cardX, y: 2.26, w: cardW, h: 3.32, fill: C.white });
   K.text(s, 'PACKAGES SCANNED PER RUN  ·  EARLIER VERSION', {
     x: cardX + 0.34, y: 2.54, w: cardW - 0.68, h: 0.24, ...T.micro, color: C.red,
   });
-  K.placeImage(s, 'chart-packages', { x: cardX + 0.26, y: 2.88, w: cardW - 0.52 });
+  // sized to sit inside the card, leaving room for the example band below
+  const chartW = 4.66;
+  K.placeImage(s, 'chart-packages', { x: cardX + (cardW - chartW) / 2, y: 2.82, w: chartW });
 
+  // a worked example, so the three answers land as something concrete
+  const ey = 5.76;
+  s.addShape('roundRect', {
+    x: cardX, y: ey, w: cardW, h: 0.96, rectRadius: 0.06,
+    fill: { color: C.redTint }, line: { type: 'none' },
+  });
+  s.addShape('rect', { x: cardX, y: ey, w: 0.055, h: 0.96, fill: { color: C.red }, line: { type: 'none' } });
+  K.text(s, 'IN PRACTICE', {
+    x: cardX + 0.26, y: ey + 0.14, w: 4, h: 0.22, ...T.micro, color: C.red,
+  });
+  K.text(s, 'A package we use has a known flaw. AEGIS answers three things: does our code actually call it, how much would be affected, and how risky is the fix. Then the team decides whether it is urgent — instead of guessing.', {
+    x: cardX + 0.26, y: ey + 0.38, w: cardW - 0.5, h: 0.5,
+    fontFace: 'Montserrat', fontSize: 10, color: C.ink, lineSpacingMultiple: 1.2,
+  });
+
+  s.addNotes(NOTES.p2Built);
   return s;
 }
 
@@ -117,7 +136,7 @@ function pipeline(pptx) {
     eyebrow: 'Project 02  ·  How It Works',
     title: 'Five stages. Only one can change anything',
     section: 'AEGIS',
-    num: 12,
+    num: 13,
   });
 
   // the core rule, given top billing
@@ -217,7 +236,7 @@ function proving(pptx) {
     eyebrow: 'Project 02  ·  Proving It Works',
     title: 'I tried to catch it lying, and it held',
     section: 'AEGIS',
-    num: 13,
+    num: 14,
   });
 
   K.text(s, 'A security tool that quietly reports "clean" when it actually failed is worse than no tool at all. So I tested the failure paths, not just the happy path.', {
@@ -259,6 +278,7 @@ function proving(pptx) {
     y += 0.95;
   });
 
+  s.addNotes(NOTES.p2Proving);
   return s;
 }
 
@@ -270,7 +290,7 @@ function next(pptx) {
     eyebrow: 'Project 02  ·  What Comes Next',
     title: 'What is still open, and how I would close it',
     section: 'AEGIS',
-    num: 14,
+    num: 15,
   });
 
   K.text(s, 'The pipeline is built and its safety rails are tested. Three things still need a real run before I would call it finished.', {
@@ -303,6 +323,7 @@ function next(pptx) {
     { text: '  the parts that judge risk are built and tested. The parts that depend on the corporate network are not proven yet.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
   ], { x: G.M, y: 6.38, w: G.contentW, h: 0.3 });
 
+  s.addNotes(NOTES.p2Next);
   return s;
 }
 

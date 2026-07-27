@@ -1,6 +1,6 @@
 # Internship Exit Presentation — Stewart Title
 
-A 22-slide exit presentation for Jair Maldonado's Information Security Analyst internship,
+A 23-slide exit presentation for Jair Maldonado's Information Security Analyst internship,
 built programmatically so it can be re-rendered and revised from source.
 
 Audience is mixed technical / non-technical, so every security term is explained
@@ -52,7 +52,7 @@ curl -sSL -o Montserrat.ttf \
 | `src/genart.js` | Writes the SVGs and rasterizes them to high-DPI PNGs. |
 | `src/chrome.js` | Reusable slide furniture — eyebrow, title, rule, cards, footer, logo. |
 | `src/slides/*.js` | One module per section. |
-| `build.js` | Assembles the 22 slides in order. |
+| `build.js` | Assembles the 23 slides in order. |
 
 ## Brand
 
@@ -98,26 +98,30 @@ distorted.
 
 1. Title
 2. Table of Contents
-3. About Me
-4. Internship Overview — three rotations
-5. **Divider — Project 01**
-6. Image Management Program — the problem (nine required tools)
-7. Image Management Program — building the process
-8. Image Management Program — what comes next
-9. **Divider — Project 02**
-10. AEGIS — the problem (supply-chain attacks)
-11. AEGIS — what I built (reachability, three honest answers)
-12. AEGIS — the five stages
-13. AEGIS — proving it works
-14. AEGIS — what comes next
-15. **Divider — Project 03**
-16. CVE-to-Patch — the problem (117 flaws, manual baseline)
-17. CVE-to-Patch — two days of work to twelve seconds
-18. CVE-to-Patch — 52 of the 117 needed no action
-19. CVE-to-Patch — where 209 came from, and the rule that collapses it
-20. CVE-to-Patch — the payoff (209 rows to 46 tickets)
-21. CVE-to-Patch — what comes next (one unified dashboard)
-22. Summary
+3. Executive Summary — three problems, three solutions, three proofs
+4. About Me
+5. Internship Overview — three rotations
+6. **Divider — Project 01**
+7. Image Management Program — the problem (nine required tools)
+8. Image Management Program — building the process
+9. Image Management Program — what comes next
+10. **Divider — Project 02**
+11. AEGIS — the problem (supply-chain attacks)
+12. AEGIS — what I built (reachability, three honest answers)
+13. AEGIS — the five stages
+14. AEGIS — proving it works
+15. AEGIS — what comes next
+16. **Divider — Project 03**
+17. CVE-to-Patch — the problem (117 flaws, manual baseline)
+18. CVE-to-Patch — two days of work to twelve seconds
+19. CVE-to-Patch — 52 of the 117 needed no action
+20. CVE-to-Patch — where 209 came from, and the rule that collapses it
+21. CVE-to-Patch — the payoff (209 rows to 46 tickets)
+22. CVE-to-Patch — what comes next (dashboard as optional follow-up)
+23. Summary
+
+Speaker notes carrying likely Q&A answers are attached to slides 3, 7, 9, 11,
+12, 14, 15, 17, 18, 19, 20 and 22.
 
 ## CVE-to-Patch accuracy
 

@@ -1,7 +1,7 @@
 /** Slides 1-4: Title, Table of Contents, About Me, Internship Overview. */
 const { C, T, G, SHADOW, ON_RED } = require('../tokens');
 const K = require('../chrome');
-const { ABOUT, ROTATIONS, TOC } = require('../content');
+const { ABOUT, ROTATIONS, TOC, EXEC, NOTES } = require('../content');
 
 // ---------------------------------------------------------------------------
 // 1 — Title. Full-bleed red with the ghosted Stewart mark.
@@ -59,7 +59,57 @@ function toc(pptx) {
 }
 
 // ---------------------------------------------------------------------------
-// 3 — About Me. Asymmetric split: red identity panel + field stack.
+// 3 — Executive summary. Three problems, three solutions, three proofs.
+//     Sits early so the room gets scale and outcome before any detail.
+// ---------------------------------------------------------------------------
+function execSummary(pptx) {
+  const s = K.contentSlide(pptx, {
+    eyebrow: 'Executive Summary',
+    title: 'Three problems, three working solutions',
+    section: 'Executive Summary',
+    num: 3,
+  });
+
+  K.text(s, 'Three separate gaps, three things the team keeps using. This is the whole story on one slide.', {
+    x: G.M, y: 2.14, w: 11.2, h: 0.34, ...T.lead, color: C.muted,
+  });
+
+  // column headers
+  const colX = [G.M, 4.62, 8.86];
+  const colW = [3.5, 4.0, G.W - G.M - 8.86];
+  ['THE PROBLEM', 'WHAT I BUILT', 'THE PROOF'].forEach((h, i) => {
+    K.text(s, h, { x: colX[i], y: 2.72, w: colW[i], h: 0.22, ...T.micro, color: C.red });
+  });
+  K.hairline(s, { y: 3.0 });
+
+  const rowH = 1.24, top = 3.16;
+  EXEC.forEach((r, i) => {
+    const y = top + i * rowH;
+    K.text(s, r.problem, {
+      x: colX[0], y, w: colW[0], h: 0.9, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.24,
+    });
+    K.text(s, r.solution, {
+      x: colX[1], y, w: colW[1] - 0.3, h: 0.9,
+      fontFace: 'Montserrat SemiBold', fontSize: 11, color: C.inkDeep, lineSpacingMultiple: 1.24,
+    });
+    // proof sits in a tinted well so the outcome column reads first
+    s.addShape('roundRect', {
+      x: colX[2] - 0.2, y: y - 0.12, w: colW[2] + 0.2, h: 0.94, rectRadius: 0.05,
+      fill: { color: C.redTint }, line: { type: 'none' },
+    });
+    K.text(s, r.proof, {
+      x: colX[2], y: y + 0.02, w: colW[2] - 0.2, h: 0.72,
+      fontFace: 'Montserrat SemiBold', fontSize: 11, color: C.red, lineSpacingMultiple: 1.24,
+    });
+    if (i < EXEC.length - 1) K.hairline(s, { y: y + 1.06 });
+  });
+
+  s.addNotes(NOTES.execSummary);
+  return s;
+}
+
+// ---------------------------------------------------------------------------
+// 4 — About Me. Asymmetric split: red identity panel + field stack.
 // ---------------------------------------------------------------------------
 function about(pptx) {
   const s = pptx.addSlide();
@@ -102,7 +152,7 @@ function about(pptx) {
 
   K.logo(s, { variant: 'red' });
   // footer confined to the white column so the rule never crosses the red panel
-  K.footer(s, { section: 'About Me', num: 3, x, w });
+  K.footer(s, { section: 'About Me', num: 4, x, w });
   return s;
 }
 
@@ -114,7 +164,7 @@ function overview(pptx) {
     eyebrow: 'Internship Overview',
     title: 'Three rotations across the security team',
     section: 'Internship Overview',
-    num: 4,
+    num: 5,
   });
 
   K.text(s, 'I moved through three different areas of Information Security. Each rotation produced one project.', {
@@ -160,4 +210,4 @@ function overview(pptx) {
   return s;
 }
 
-module.exports = { title, toc, about, overview };
+module.exports = { title, toc, execSummary, about, overview };

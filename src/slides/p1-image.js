@@ -1,13 +1,13 @@
 /** Slides 5-7: Project 01 — Image Management Program. */
 const { C, T, G, SHADOW, ON_INK } = require('../tokens');
 const K = require('../chrome');
-const { AGENTS, PROJECTS } = require('../content');
+const { AGENTS, PROJECTS, NOTES } = require('../content');
 
 const P = PROJECTS.one;
 
 function divider(pptx) {
   return require('./divider').divider(pptx, {
-    num: '01', label: P.label, blurb: P.blurb, slideNum: 5,
+    num: '01', label: P.label, blurb: P.blurb, slideNum: 6,
   });
 }
 
@@ -19,7 +19,7 @@ function problem(pptx) {
     eyebrow: 'Project 01  ·  The Problem',
     title: 'Nine required tools. No process to install them.',
     section: 'Image Management Program',
-    num: 6,
+    num: 7,
   });
 
   K.text(s, [
@@ -59,8 +59,13 @@ function problem(pptx) {
     });
   });
 
+  // why nine, in business terms
+  K.text(s, 'No single tool catches everything. Together they cover threat detection, web filtering, logging, vulnerability scanning, data-loss prevention, patch delivery and session visibility.', {
+    x: x0, y: 5.32, w: 7.86, h: 0.42, ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.2,
+  });
+
   // the real gap — stated plainly
-  const gy = 5.5;
+  const gy = 5.8;
   s.addShape('roundRect', {
     x: x0, y: gy, w: 7.86, h: 0.92, rectRadius: 0.05,
     fill: { color: C.redTint }, line: { type: 'none' },
@@ -73,6 +78,7 @@ function problem(pptx) {
     x: x0 + 0.24, y: gy + 0.4, w: 7.4, h: 0.44, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.18,
   });
 
+  s.addNotes(NOTES.p1Problem);
   return s;
 }
 
@@ -84,7 +90,7 @@ function process(pptx) {
     eyebrow: 'Project 01  ·  What I Built',
     title: 'Building the process from scratch',
     section: 'Image Management Program',
-    num: 7,
+    num: 8,
   });
 
   K.text(s, 'My role was to coordinate and bridge teams — define what is required, name who owns it, and get it signed off. I did not build or provision the machines myself.', {
@@ -151,7 +157,7 @@ function next(pptx) {
     eyebrow: 'Project 01  ·  What Comes Next',
     title: 'From a drafted framework to a standing process',
     section: 'Image Management Program',
-    num: 8,
+    num: 9,
   });
 
   K.text(s, 'The framework exists on paper. Turning it into something the company runs without me is the next stretch.', {
@@ -183,6 +189,11 @@ function next(pptx) {
     { text: '  drafted and staged for review, not yet formally adopted. The decision sits with the policy manager in Q4.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
   ], { x: G.M, y: 5.72, w: G.contentW, h: 0.3 });
 
+  K.text(s, 'It also closes an audit gap: once adopted, we can show that every new machine met a defined security baseline before it was deployed.', {
+    x: G.M, y: 6.1, w: G.contentW, h: 0.3, ...T.bodySm, color: C.red,
+  });
+
+  s.addNotes(NOTES.p1Next);
   return s;
 }
 

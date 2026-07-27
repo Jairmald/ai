@@ -35,39 +35,39 @@ FONT_DIR = os.path.expanduser("~/.fonts")
 #
 # Vector artwork: (order, slide, section, slug, asset-name, description)
 VECTOR = [
-    (2, 6, "Project 01 — Image Management", "isometric-secure-image", "iso-machine",
+    (2, 7, "Project 01 — Image Management", "isometric-secure-image", "iso-machine",
      "Isometric stack: a base cloud image with three security layers and a shield crest."),
-    (6, 10, "Project 02 — AEGIS", "supply-chain-attack-flow", "supply-chain",
+    (6, 11, "Project 02 — AEGIS", "supply-chain-attack-flow", "supply-chain",
      "Attacker to poisoned package to public registry to every downstream project."),
-    (7, 11, "Project 02 — AEGIS", "packages-scanned-chart", "chart-packages",
+    (7, 12, "Project 02 — AEGIS", "packages-scanned-chart", "chart-packages",
      "Bar chart: 82 / 3,024 / 2,651 packages per run, from the earlier version."),
-    (10, 17, "Project 03 — CVE-to-Patch", "match-rate-rings", "chart-match",
+    (10, 18, "Project 03 — CVE-to-Patch", "match-rate-rings", "chart-match",
      "Before/after proportion rings: 0% matched by hand, 100% automated."),
-    (11, 18, "Project 03 — CVE-to-Patch", "no-action-waffle", "chart-no-action",
+    (11, 19, "Project 03 — CVE-to-Patch", "no-action-waffle", "chart-no-action",
      "117 squares: 65 still needing a patch (red), 52 already covered (grey)."),
-    (13, 20, "Project 03 — CVE-to-Patch", "consolidation-waffle", "chart-consolidation",
+    (13, 21, "Project 03 — CVE-to-Patch", "consolidation-waffle", "chart-consolidation",
      "209 squares, one per row in Kevlar's report; the 46 in red became tickets."),
-    (15, 21, "Project 03 — CVE-to-Patch", "dashboard-mockup", "dashboard-mock",
+    (15, 22, "Project 03 — CVE-to-Patch", "dashboard-mockup", "dashboard-mock",
      "Concept dashboard tying Tenable, Kevlar, Jira and Wiz into one view."),
 ]
 
 # Native PowerPoint shapes: (order, slide, section, slug, crop box in inches, description)
 NATIVE = [
-    (1, 4, "Internship Overview", "three-rotations-timeline", (0.75, 2.95, 12.58, 6.25),
+    (1, 5, "Internship Overview", "three-rotations-timeline", (0.75, 2.95, 12.58, 6.25),
      "Timeline spine with three rotation cards."),
-    (3, 6, "Project 01 — Image Management", "nine-required-tools", (4.52, 2.75, 12.58, 6.50),
+    (3, 7, "Project 01 — Image Management", "nine-required-tools", (4.52, 2.75, 12.58, 6.50),
      "3x3 grid of the nine required security tools, plus the gap callout."),
-    (4, 7, "Project 01 — Image Management", "three-step-process", (0.75, 2.75, 12.58, 6.66),
+    (4, 8, "Project 01 — Image Management", "three-step-process", (0.75, 2.75, 12.58, 6.66),
      "Define the Tools / Define the Owners / Get It Adopted, plus the delivered band."),
-    (5, 8, "Project 01 — Image Management", "image-mgmt-next-steps", (0.75, 2.76, 12.58, 6.10),
+    (5, 9, "Project 01 — Image Management", "image-mgmt-next-steps", (0.75, 2.76, 12.58, 6.10),
      "Adoption, owner handover, and a pre-deploy check."),
-    (8, 12, "Project 02 — AEGIS", "aegis-five-stage-pipeline", (0.75, 1.96, 12.58, 6.56),
+    (8, 13, "Project 02 — AEGIS", "aegis-five-stage-pipeline", (0.75, 1.96, 12.58, 6.56),
      "The core rule, stages SCAN/REACH/BLAST/REGRESS, and the gated FIX stage."),
-    (9, 14, "Project 02 — AEGIS", "aegis-next-steps", (0.75, 2.66, 12.58, 6.72),
+    (9, 15, "Project 02 — AEGIS", "aegis-next-steps", (0.75, 2.66, 12.58, 6.72),
      "Unblock live lookups, read code structure, and get it installed elsewhere."),
-    (12, 19, "Project 03 — CVE-to-Patch", "numbers-relate-flow", (0.75, 5.05, 12.58, 6.62),
+    (12, 20, "Project 03 — CVE-to-Patch", "numbers-relate-flow", (0.75, 5.05, 12.58, 6.62),
      "2,658 host-product assignments to Kevlar's 209 rows to 46 tickets."),
-    (16, 21, "Project 03 — CVE-to-Patch", "four-system-chain", (0.75, 3.30, 5.60, 6.70),
+    (16, 22, "Project 03 — CVE-to-Patch", "four-system-chain", (0.75, 3.30, 5.60, 6.70),
      "Tenable to Kevlar to Jira to Wiz, with each system's role."),
 ]
 
@@ -86,6 +86,7 @@ def font(name, size):
 # Guards against the slide numbers here drifting out of sync with build.js.
 SECTION_FOOTER = {
     "Internship Overview": "INTERNSHIP OVERVIEW",
+    "Executive Summary": "EXECUTIVE SUMMARY",
     "Project 01 — Image Management": "IMAGE MANAGEMENT PROGRAM",
     "Project 02 — AEGIS": "AEGIS",
     "Project 03 — CVE-to-Patch": "CVE-TO-PATCH AUTOMATION",

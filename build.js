@@ -27,19 +27,20 @@ function buildDeck() {
   const p3 = require('./src/slides/p3-cve');
   const close = require('./src/slides/close');
 
-  // 1-4 front matter
+  // 1-5 front matter
   front.title(pptx);
   front.toc(pptx);
+  front.execSummary(pptx);
   front.about(pptx);
   front.overview(pptx);
 
-  // 5-8 Project 01
+  // 6-9 Project 01
   p1.divider(pptx);
   p1.problem(pptx);
   p1.process(pptx);
   p1.next(pptx);
 
-  // 9-14 Project 02
+  // 10-15 Project 02
   p2.divider(pptx);
   p2.problem(pptx);
   p2.built(pptx);
@@ -47,7 +48,7 @@ function buildDeck() {
   p2.proving(pptx);
   p2.next(pptx);
 
-  // 15-21 Project 03
+  // 16-22 Project 03
   p3.divider(pptx);
   p3.problem(pptx);
   p3.match(pptx);
@@ -56,7 +57,7 @@ function buildDeck() {
   p3.roi(pptx);
   p3.future(pptx);
 
-  // 22 closing
+  // 23 closing
   close.summary(pptx);
 
   return pptx;
