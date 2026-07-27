@@ -103,20 +103,32 @@ distorted.
 5. **Divider — Project 01**
 6. Image Management Program — the problem (nine required tools)
 7. Image Management Program — building the process
-8. **Divider — Project 02**
-9. AEGIS — the problem (supply-chain attacks)
-10. AEGIS — what I built (5,675 packages scanned)
-11. AEGIS — the pipeline, as a UML component diagram
-12. **Divider — Project 03**
-13. CVE-to-Patch — the problem (117 flaws)
-14. CVE-to-Patch — manual to seconds (0% → 100%)
-15. CVE-to-Patch — what 209 means, and the rule that collapses it
-16. CVE-to-Patch — the payoff (209 → 46 tickets, 78% fewer)
-17. CVE-to-Patch — what comes next (one unified dashboard)
-18. Summary
+8. Image Management Program — what comes next
+9. **Divider — Project 02**
+10. AEGIS — the problem (supply-chain attacks)
+11. AEGIS — what I built (reachability, three honest answers)
+12. AEGIS — the five stages
+13. AEGIS — proving it works
+14. AEGIS — what comes next
+15. **Divider — Project 03**
+16. CVE-to-Patch — the problem (117 flaws)
+17. CVE-to-Patch — manual to seconds (0% to 100%)
+18. CVE-to-Patch — what 209 means, and the rule that collapses it
+19. CVE-to-Patch — the payoff (209 to 46 tickets, 78% fewer)
+20. CVE-to-Patch — what comes next (one unified dashboard)
+21. Summary
 
-## Open item
+## AEGIS accuracy
 
-Slide 11 carries a **CURRENT STATUS** note for the AEGIS pipeline: built end to
-end, first full test just run, results still to be confirmed. Update that note
-once the real result is known.
+The AEGIS section describes the **current five-stage architecture**: SCAN,
+REACH, BLAST, REGRESS, FIX. An earlier design (FORGE / LEDGER / WATCHTOWER) is
+gone — do not reintroduce it.
+
+Two things the section is careful about, because a security audience will ask:
+
+- The **5,675 packages** figure comes from a real production scan by an
+  *earlier version* of the tool, and is labelled as such on slides 11 and 12.
+  It is not mixed in with the current version's results.
+- The current version's live flaw-database lookups are **not yet proven** on the
+  corporate network, and slide 14 says so plainly. Do not soften that — the
+  tool's own core rule is that unknown is never reported as safe.

@@ -7,7 +7,7 @@ const P = PROJECTS.three;
 
 function divider(pptx) {
   return require('./divider').divider(pptx, {
-    num: '03', label: P.label, blurb: P.blurb, slideNum: 12,
+    num: '03', label: P.label, blurb: P.blurb, slideNum: 15,
   });
 }
 
@@ -19,7 +19,7 @@ function problem(pptx) {
     eyebrow: 'Project 03  ·  The Problem',
     title: 'Every flaw needed its own patch, found by hand',
     section: 'CVE-to-Patch Automation',
-    num: 13,
+    num: 16,
   });
 
   // left — the headline number
@@ -75,7 +75,7 @@ function match(pptx) {
     eyebrow: 'Project 03  ·  The Result',
     title: 'From hours of manual lookup to seconds',
     section: 'CVE-to-Patch Automation',
-    num: 14,
+    num: 17,
   });
 
   K.text(s, 'I built a script that searches Microsoft\'s official patch catalogue automatically and returns the exact fix for each flaw.', {
@@ -121,7 +121,7 @@ function granularity(pptx) {
     eyebrow: 'Project 03  ·  Going Deeper',
     title: 'Matching the flaws was only half the job',
     section: 'CVE-to-Patch Automation',
-    num: 15,
+    num: 18,
   });
 
   const cardW = 5.66, gap = 0.31, top = 2.22, cardH = 2.42;
@@ -205,7 +205,7 @@ function roi(pptx) {
     eyebrow: 'Project 03  ·  The Payoff',
     title: '209 fix-actions became 46 tickets',
     section: 'CVE-to-Patch Automation',
-    num: 16,
+    num: 19,
   });
 
   // headline stat row
@@ -263,7 +263,7 @@ function future(pptx) {
     eyebrow: 'Project 03  ·  What Comes Next',
     title: 'Four systems, one screen',
     section: 'CVE-to-Patch Automation',
-    num: 17,
+    num: 20,
   });
 
   const x0 = G.M, w = 4.55;

@@ -1,5 +1,5 @@
-/** Slides 8-11: Project 02 — AEGIS, supply-chain defense. */
-const { C, T, G, SHADOW, ON_RED } = require('../tokens');
+/** Slides 9-14: Project 02 — AEGIS, supply-chain defense. */
+const { C, T, G, SHADOW, ON_RED, ON_INK } = require('../tokens');
 const K = require('../chrome');
 const { PROJECTS } = require('../content');
 
@@ -7,30 +7,28 @@ const P = PROJECTS.two;
 
 function divider(pptx) {
   return require('./divider').divider(pptx, {
-    num: '02', label: P.label, blurb: P.blurb, slideNum: 8,
+    num: '02', label: P.label, blurb: P.blurb, slideNum: 9,
   });
 }
 
 // ---------------------------------------------------------------------------
-// 9 — The problem: one poisoned package reaches everyone downstream.
+// 10 — The problem: one poisoned package reaches everyone downstream.
 // ---------------------------------------------------------------------------
 function problem(pptx) {
   const s = K.contentSlide(pptx, {
     eyebrow: 'Project 02  ·  The Problem',
     title: 'One poisoned package reaches everyone',
     section: 'AEGIS',
-    num: 9,
+    num: 10,
   });
 
   K.text(s, 'In a supply-chain attack, an attacker hides malicious code inside a legitimate, widely-used open-source package. Everyone who installs it inherits the compromise — including us. Real campaigns in 2025 and 2026 worked exactly this way, including a self-spreading family that reused each victim to infect the next.', {
     x: G.M, y: 2.16, w: 11.4, h: 0.62, ...T.lead, color: C.muted, lineSpacingMultiple: 1.22,
   });
 
-  // hero flow artwork
   const artX = 1.28, artW = 10.8, artY = 3.06;
   const artH = K.placeImage(s, 'supply-chain', { x: artX, y: artY, w: artW });
 
-  // stage labels pinned to the artwork's stage centres
   const stages = [
     { f: 0.060, t: 'Attacker' },
     { f: 0.246, t: 'Poisoned package' },
@@ -45,7 +43,6 @@ function problem(pptx) {
     });
   });
 
-  // the gap in existing tooling
   const gy = 5.62;
   s.addShape('roundRect', {
     x: G.M, y: gy, w: G.contentW, h: 0.94, rectRadius: 0.06,
@@ -64,28 +61,31 @@ function problem(pptx) {
 }
 
 // ---------------------------------------------------------------------------
-// 10 — What I built, and the scan volume behind it.
+// 11 — What I built: reachability, three honest answers, production scale.
 // ---------------------------------------------------------------------------
 function built(pptx) {
   const s = K.contentSlide(pptx, {
     eyebrow: 'Project 02  ·  What I Built',
     title: 'A scanner that checks if the flaw is reachable',
     section: 'AEGIS',
-    num: 10,
+    num: 11,
   });
 
-  // left — headline metric + supporting proof
+  // headline metric — explicitly attributed to the earlier version
   K.stat(s, {
-    value: P.packagesScanned, label: 'real packages scanned in production',
-    x: G.M, y: 2.26, w: 4.3, valueStyle: T.statXL, gap: 1.3,
+    value: P.packagesScanned, label: 'packages scanned in production\nby an earlier version of the tool',
+    x: G.M, y: 2.2, w: 4.3, valueStyle: T.statXL, gap: 1.24,
   });
 
   const bullets = [
-    ['Zero active compromise found', 'Nothing malicious was live in our dependencies.'],
-    ['Full coverage', 'Every package our software depends on was checked, not a sample.'],
-    ['Reachability, not just presence', 'AEGIS checks whether our code calls the flawed part, then prepares a fix ready for review.'],
+    ['Reachability, not just presence',
+     'Not "you have a flawed package" but "your code actually calls the flawed part".'],
+    ['Three honest answers',
+     'Reachable, no call site found, or can\'t prove. They are never collapsed together into a single "safe".'],
+    ['Unknown is never "safe"',
+     'If the tool cannot tell, it says so. It never reports a clean result it has not earned.'],
   ];
-  let by = 3.86;
+  let by = 4.02;
   bullets.forEach(([t, d]) => {
     s.addShape('ellipse', { x: G.M + 0.02, y: by + 0.08, w: 0.12, h: 0.12, fill: { color: C.red }, line: { type: 'none' } });
     K.text(s, t, {
@@ -93,15 +93,15 @@ function built(pptx) {
       fontFace: 'Montserrat SemiBold', fontSize: 12.5, color: C.inkDeep,
     });
     K.text(s, d, {
-      x: G.M + 0.28, y: by + 0.3, w: 4.05, h: 0.56, ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.2,
+      x: G.M + 0.28, y: by + 0.28, w: 4.05, h: 0.6, ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.2,
     });
-    by += 0.94;
+    by += 0.9;
   });
 
-  // right — validation runs
+  // right — validation runs from that earlier version
   const cardX = 5.66, cardW = G.W - G.M - cardX;
   K.card(s, { x: cardX, y: 2.26, w: cardW, h: 4.16, fill: C.white });
-  K.text(s, 'PACKAGES SCANNED PER VALIDATION RUN', {
+  K.text(s, 'PACKAGES SCANNED PER RUN  ·  EARLIER VERSION', {
     x: cardX + 0.34, y: 2.54, w: cardW - 0.68, h: 0.24, ...T.micro, color: C.red,
   });
   K.placeImage(s, 'chart-packages', { x: cardX + 0.26, y: 2.88, w: cardW - 0.52 });
@@ -110,103 +110,200 @@ function built(pptx) {
 }
 
 // ---------------------------------------------------------------------------
-// 11 — The pipeline as a UML component diagram (native shapes, stays editable).
+// 12 — The five stages. Four read-only and automatic; one gated behind a human.
 // ---------------------------------------------------------------------------
 function pipeline(pptx) {
   const s = K.contentSlide(pptx, {
-    eyebrow: 'Project 02  ·  How It Fits Together',
-    title: 'Four parts, one rule: nothing grades itself',
+    eyebrow: 'Project 02  ·  How It Works',
+    title: 'Five stages. Only one can change anything',
     section: 'AEGIS',
-    num: 11,
+    num: 12,
   });
 
-  K.text(s, 'Built as four separate parts so no single component can both make a change and declare it safe.', {
-    x: G.M, y: 2.16, w: 10.8, h: 0.34, ...T.lead, color: C.muted,
+  // the core rule, given top billing
+  const ry = 2.04;
+  s.addShape('roundRect', {
+    x: G.M, y: ry, w: G.contentW, h: 0.58, rectRadius: 0.06,
+    fill: { color: C.redTint }, line: { type: 'none' },
+  });
+  s.addShape('rect', { x: G.M, y: ry, w: 0.055, h: 0.58, fill: { color: C.red }, line: { type: 'none' } });
+  K.text(s, [
+    { text: 'THE CORE RULE   ', options: { fontFace: 'Montserrat SemiBold', fontSize: 9, charSpacing: 1.4, color: C.red } },
+    { text: P.honestyRule, options: { fontFace: 'Montserrat SemiBold', fontSize: 12.5, color: C.inkDeep } },
+  ], { x: G.M + 0.26, y: ry + 0.19, w: G.contentW - 0.5, h: 0.3 });
+
+  // stages 0-3
+  K.text(s, 'STAGES 00–03   ·   RUN AUTOMATICALLY, READ ONLY — NOTHING IS CHANGED', {
+    x: G.M, y: 2.84, w: 9, h: 0.22, ...T.micro, color: C.muted,
   });
 
-  // narrower boxes buy enough gap for the hand-off labels to sit between them
-  const boxW = 2.42, boxH = 2.04, top = 2.78;
-  const gap = (G.contentW - boxW * 4) / 3;
-  const centres = [];
-
-  P.pipeline.forEach((comp, i) => {
+  const gap = 0.36, boxW = (G.contentW - gap * 3) / 4, top = 3.06, boxH = 1.9;
+  P.pipeline.forEach((st, i) => {
     const x = G.M + i * (boxW + gap);
-    centres.push(x + boxW / 2);
+    K.card(s, { x, y: top, w: boxW, h: boxH, fill: C.white });
+    s.addShape('rect', { x, y: top, w: boxW, h: 0.05, fill: { color: C.red }, line: { type: 'none' } });
 
-    // component body
-    s.addShape('rect', {
-      x, y: top, w: boxW, h: boxH,
-      fill: { color: C.white }, line: { color: C.ink, width: 1 }, shadow: SHADOW.soft,
+    K.text(s, st.n, {
+      x: x + 0.24, y: top + 0.18, w: 1, h: 0.24,
+      fontFace: 'Montserrat ExtraBold', fontSize: 13, color: 'DFBEC4', charSpacing: 0.4,
     });
-    // header compartment
-    s.addShape('rect', {
-      x, y: top, w: boxW, h: 0.78,
-      fill: { color: i === 0 ? C.red : C.card }, line: { color: C.ink, width: 1 },
+    K.text(s, st.name, {
+      x: x + 0.24, y: top + 0.44, w: boxW - 0.48, h: 0.3,
+      fontFace: 'Montserrat ExtraBold', fontSize: 16, color: C.inkDeep, charSpacing: 0.3,
     });
-    K.text(s, `«${comp.stereo}»`, {
-      x: x + 0.1, y: top + 0.12, w: boxW - 0.2, h: 0.22, align: 'center',
-      fontFace: 'Montserrat Medium', fontSize: 9.5, color: i === 0 ? ON_RED.eyebrow : C.muted,
+    K.text(s, st.d, {
+      x: x + 0.24, y: top + 0.8, w: boxW - 0.48, h: 0.78,
+      fontFace: 'Montserrat', fontSize: 9.5, color: C.muted, lineSpacingMultiple: 1.18,
     });
-    K.text(s, comp.name, {
-      x: x + 0.1, y: top + 0.36, w: boxW - 0.2, h: 0.32, align: 'center',
-      fontFace: 'Montserrat ExtraBold', fontSize: 15, charSpacing: 0.4,
-      color: i === 0 ? C.white : C.inkDeep,
+    // network badge pinned to the card's bottom edge, clear of the description
+    K.text(s, st.net, {
+      x: x + 0.24, y: top + boxH - 0.3, w: boxW - 0.48, h: 0.22,
+      fontFace: 'Montserrat SemiBold', fontSize: 8.5, color: C.red, charSpacing: 0.6,
     });
 
-    // operations compartment
-    comp.ops.forEach((op, j) => {
-      K.text(s, op, {
-        x: x + 0.16, y: top + 0.94 + j * 0.33, w: boxW - 0.32, h: 0.28,
-        fontFace: 'Courier New', fontSize: 9.5, color: C.ink,
+    if (i < 3) {
+      K.connector(s, {
+        x: x + boxW + 0.05, y: top + boxH / 2, len: gap - 0.1, dir: 'right', color: C.ink,
       });
-    });
+    }
   });
 
-  // hand-off arrows, each labelled inside its own gap so nothing overlaps a box
-  const labels = ['findings', 'fix\nproposal', 'approved\nchange'];
-  for (let i = 0; i < 3; i++) {
-    const x1 = G.M + i * (boxW + gap) + boxW;
-    K.connector(s, {
-      x: x1 + 0.06, y: top + boxH / 2 + 0.18, len: gap - 0.12, dir: 'right', color: C.ink,
-    });
-    K.text(s, labels[i], {
-      x: x1, y: top + boxH / 2 - 0.44, w: gap, h: 0.54, align: 'center', valign: 'bottom',
-      fontFace: 'Montserrat Medium', fontSize: 8, color: C.muted, lineSpacingMultiple: 1.05,
-    });
-  }
-
-  // dashed «verify» return loop: WATCHTOWER back to AEGIS
-  const loopY = top + boxH + 0.46;
-  const xEnd = centres[3], xStart = centres[0];
-  const drop = loopY - (top + boxH);
-  K.connector(s, { x: xEnd, y: top + boxH, len: drop, dir: 'down', color: C.red, head: false, dash: true });
-  K.connector(s, { x: xStart, y: loopY, len: xEnd - xStart, dir: 'left', color: C.red, head: false, dash: true });
-  K.connector(s, { x: xStart, y: top + boxH, len: drop, dir: 'up', color: C.red, head: true });
-  K.text(s, '«verify»  —  only AEGIS may mark a finding RESOLVED', {
-    x: xStart, y: loopY + 0.06, w: xEnd - xStart, h: 0.24, align: 'center',
-    fontFace: 'Montserrat SemiBold', fontSize: 9.5, color: C.red,
+  // stage 4 sits below a gate
+  const fy = 5.22, lastCx = G.M + 3 * (boxW + gap) + boxW / 2;
+  K.connector(s, { x: lastCx, y: top + boxH + 0.02, len: fy - top - boxH - 0.04, dir: 'down', color: C.red });
+  K.text(s, 'ONLY IF YOU ASK', {
+    x: lastCx - 2.6, y: top + boxH + 0.12, w: 2.4, h: 0.22, align: 'right',
+    ...T.micro, color: C.red,
   });
 
-  // UML notes
-  const noteY = 5.66, noteH = 0.92, noteW = 5.66;
-  const note = (x, heading, body, tone) => {
-    s.addShape('rect', {
-      x, y: noteY, w: noteW, h: noteH,
-      fill: { color: tone === 'warn' ? C.redTint : C.card },
-      line: { color: tone === 'warn' ? C.red : C.hair, width: 0.75 },
-    });
-    K.text(s, heading, { x: x + 0.2, y: noteY + 0.13, w: noteW - 0.5, h: 0.22, ...T.micro, color: C.red });
-    K.text(s, body, {
-      x: x + 0.2, y: noteY + 0.38, w: noteW - 0.42, h: 0.46, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.15,
-    });
-  };
+  s.addShape('roundRect', {
+    x: G.M, y: fy, w: G.contentW, h: 1.24, rectRadius: 0.06,
+    fill: { color: C.inkDeep }, line: { type: 'none' }, shadow: SHADOW.soft,
+  });
+  K.text(s, `STAGE ${P.fix.n}`, {
+    x: G.M + 0.34, y: fy + 0.22, w: 1.6, h: 0.22, ...T.micro, color: ON_INK.accent,
+  });
+  K.text(s, P.fix.name, {
+    x: G.M + 0.34, y: fy + 0.48, w: 2, h: 0.4,
+    fontFace: 'Montserrat ExtraBold', fontSize: 22, color: C.white, charSpacing: 0.3,
+  });
+  K.text(s, P.fix.d, {
+    x: G.M + 2.3, y: fy + 0.24, w: 3.5, h: 0.8,
+    fontFace: 'Montserrat', fontSize: 10, color: ON_INK.body, lineSpacingMultiple: 1.2,
+  });
 
-  note(G.M, 'THE INVARIANT',
-    'FORGE never assigns severity. AEGIS never checks out a branch. Each part does one job.', 'plain');
-  note(G.M + noteW + 0.31, 'CURRENT STATUS',
-    'Built end to end; first full pipeline test just run. Results to be confirmed before rollout.', 'warn');
+  // the three rails that make stage 4 safe
+  P.fix.rails.forEach((r, i) => {
+    const rx = G.M + 6.1, ry2 = fy + 0.2 + i * 0.29;
+    K.text(s, '—', {
+      x: rx, y: ry2, w: 0.2, h: 0.24,
+      fontFace: 'Montserrat SemiBold', fontSize: 10, color: ON_INK.accent,
+    });
+    K.text(s, r, {
+      x: rx + 0.24, y: ry2, w: 5.1, h: 0.26,
+      fontFace: 'Montserrat SemiBold', fontSize: 10.5, color: C.white,
+    });
+  });
 
   return s;
 }
 
-module.exports = { divider, problem, built, pipeline };
+// ---------------------------------------------------------------------------
+// 13 — Proving it works. The verification story a security audience wants.
+// ---------------------------------------------------------------------------
+function proving(pptx) {
+  const V = P.verification;
+  const s = K.contentSlide(pptx, {
+    eyebrow: 'Project 02  ·  Proving It Works',
+    title: 'I tried to catch it lying, and it held',
+    section: 'AEGIS',
+    num: 13,
+  });
+
+  K.text(s, 'A security tool that quietly reports "clean" when it actually failed is worse than no tool at all. So I tested the failure paths, not just the happy path.', {
+    x: G.M, y: 2.14, w: 11.2, h: 0.36, ...T.lead, color: C.muted,
+  });
+
+  // two stat anchors
+  const stats = [[V.packages, 'packages read from a real\nproject\'s lockfile'], [V.bugs, 'real bugs found in my own\ncode, and fixed']];
+  stats.forEach(([v, l], i) => {
+    const x = G.M + i * 2.5;
+    K.text(s, v, {
+      x, y: 2.72, w: 2.3, h: 0.66,
+      fontFace: 'Montserrat ExtraBold', fontSize: 40, color: C.red, charSpacing: -1.4,
+    });
+    K.text(s, l, {
+      x, y: 3.42, w: 2.3, h: 0.56, ...T.caption, color: C.muted, lineSpacingMultiple: 1.2,
+    });
+  });
+
+  K.hairline(s, { x: G.M, y: 4.22, w: 4.5 });
+  K.text(s, 'The bugs are the interesting part: one was an honesty bug — a "can\'t prove" result was being described as if the flaw had been confirmed absent. Exactly the failure the tool exists to prevent.', {
+    x: G.M, y: 4.42, w: 4.4, h: 1.1, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.26,
+  });
+
+  // what was actually tested
+  const x0 = 5.86, w = G.W - G.M - x0;
+  K.text(s, 'WHAT I ACTUALLY TESTED', { x: x0, y: 2.66, w, h: 0.22, ...T.micro, color: C.red });
+
+  let y = 2.98;
+  V.points.forEach(([t, d]) => {
+    s.addShape('rect', { x: x0, y: y + 0.06, w: 0.05, h: 0.2, fill: { color: C.red }, line: { type: 'none' } });
+    K.text(s, t, {
+      x: x0 + 0.2, y, w: w - 0.2, h: 0.26,
+      fontFace: 'Montserrat SemiBold', fontSize: 12, color: C.inkDeep,
+    });
+    K.text(s, d, {
+      x: x0 + 0.2, y: y + 0.28, w: w - 0.24, h: 0.6, ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.2,
+    });
+    y += 0.95;
+  });
+
+  return s;
+}
+
+// ---------------------------------------------------------------------------
+// 14 — What is not finished yet, said plainly.
+// ---------------------------------------------------------------------------
+function next(pptx) {
+  const s = K.contentSlide(pptx, {
+    eyebrow: 'Project 02  ·  What Comes Next',
+    title: 'What is still open, and how I would close it',
+    section: 'AEGIS',
+    num: 14,
+  });
+
+  K.text(s, 'The pipeline is built and its safety rails are tested. Three things still need a real run before I would call it finished.', {
+    x: G.M, y: 2.16, w: 11.2, h: 0.36, ...T.lead, color: C.muted,
+  });
+
+  const cardW = (G.contentW - 0.31 * 2) / 3, top = 2.76, cardH = 3.44;
+  P.next.forEach(([t, d], i) => {
+    const x = G.M + i * (cardW + 0.31);
+    K.card(s, { x, y: top, w: cardW, h: cardH, fill: C.white });
+    s.addShape('rect', { x, y: top, w: cardW, h: 0.05, fill: { color: C.red }, line: { type: 'none' } });
+
+    K.text(s, String(i + 1).padStart(2, '0'), {
+      x: x + 0.34, y: top + 0.3, w: 1, h: 0.34,
+      fontFace: 'Montserrat ExtraBold', fontSize: 20, color: 'DFBEC4', charSpacing: -0.3,
+    });
+    K.text(s, t, {
+      x: x + 0.34, y: top + 0.72, w: cardW - 0.68, h: 0.62,
+      fontFace: 'Montserrat SemiBold', fontSize: 14.5, color: C.inkDeep, lineSpacingMultiple: 1.08,
+    });
+    K.text(s, d, {
+      x: x + 0.34, y: top + 1.42, w: cardW - 0.68, h: 1.9,
+      ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.26,
+    });
+  });
+
+  // honest status line — kept to one line so it clears the footer rule
+  K.text(s, [
+    { text: 'Said plainly:', options: { fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep } },
+    { text: '  the parts that judge risk are built and tested. The parts that depend on the corporate network are not proven yet.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
+  ], { x: G.M, y: 6.38, w: G.contentW, h: 0.3 });
+
+  return s;
+}
+
+module.exports = { divider, problem, built, pipeline, proving, next };

@@ -50,7 +50,7 @@ function summary(pptx) {
     x: G.M, y: 6.54, w: 8.4, h: 0.28, ...T.caption, color: ON_RED.body,
   });
 
-  K.footer(s, { section: 'Summary', num: 18, dark: true });
+  K.footer(s, { section: 'Summary', num: 21, dark: true });
   return s;
 }
 

@@ -33,18 +33,21 @@ function buildDeck() {
   front.about(pptx);
   front.overview(pptx);
 
-  // 5-7 Project 01
+  // 5-8 Project 01
   p1.divider(pptx);
   p1.problem(pptx);
   p1.process(pptx);
+  p1.next(pptx);
 
-  // 8-11 Project 02
+  // 9-14 Project 02
   p2.divider(pptx);
   p2.problem(pptx);
   p2.built(pptx);
   p2.pipeline(pptx);
+  p2.proving(pptx);
+  p2.next(pptx);
 
-  // 12-17 Project 03
+  // 15-20 Project 03
   p3.divider(pptx);
   p3.problem(pptx);
   p3.match(pptx);
@@ -52,7 +55,7 @@ function buildDeck() {
   p3.roi(pptx);
   p3.future(pptx);
 
-  // 18 closing
+  // 21 closing
   close.summary(pptx);
 
   return pptx;

@@ -143,4 +143,47 @@ function process(pptx) {
   return s;
 }
 
-module.exports = { divider, problem, process };
+// ---------------------------------------------------------------------------
+// 8 — Where the programme goes from here.
+// ---------------------------------------------------------------------------
+function next(pptx) {
+  const s = K.contentSlide(pptx, {
+    eyebrow: 'Project 01  ·  What Comes Next',
+    title: 'From a drafted framework to a standing process',
+    section: 'Image Management Program',
+    num: 8,
+  });
+
+  K.text(s, 'The framework exists on paper. Turning it into something the company runs without me is the next stretch.', {
+    x: G.M, y: 2.16, w: 11.2, h: 0.36, ...T.lead, color: C.muted,
+  });
+
+  const cardW = (G.contentW - 0.31 * 2) / 3, top = 2.86, cardH = 2.52;
+  P.next.forEach(([t, d], i) => {
+    const x = G.M + i * (cardW + 0.31);
+    K.card(s, { x, y: top, w: cardW, h: cardH, fill: C.white });
+    s.addShape('rect', { x, y: top, w: cardW, h: 0.05, fill: { color: C.red }, line: { type: 'none' } });
+
+    K.text(s, String(i + 1).padStart(2, '0'), {
+      x: x + 0.34, y: top + 0.3, w: 1, h: 0.34,
+      fontFace: 'Montserrat ExtraBold', fontSize: 20, color: 'DFBEC4', charSpacing: -0.3,
+    });
+    K.text(s, t, {
+      x: x + 0.34, y: top + 0.74, w: cardW - 0.68, h: 0.4,
+      fontFace: 'Montserrat SemiBold', fontSize: 15, color: C.inkDeep,
+    });
+    K.text(s, d, {
+      x: x + 0.34, y: top + 1.22, w: cardW - 0.68, h: 1.6,
+      ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.26,
+    });
+  });
+
+  K.text(s, [
+    { text: 'The honest status:', options: { fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep } },
+    { text: '  drafted and staged for review, not yet formally adopted. The decision sits with the policy manager in Q4.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
+  ], { x: G.M, y: 5.72, w: G.contentW, h: 0.3 });
+
+  return s;
+}
+
+module.exports = { divider, problem, process, next };

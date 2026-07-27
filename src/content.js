@@ -56,16 +56,81 @@ const PROJECTS = {
       { n: '02', t: 'Define the Owners', d: 'Name the team responsible for installing and maintaining each one.' },
       { n: '03', t: 'Get It Adopted', d: 'Turn that into a written framework the company formally signs off on.' },
     ],
+    next: [
+      ['Formal adoption', 'The framework is drafted and staged for review. It goes for sign-off once the policy manager returns in Q4.'],
+      ['Owners take it from here', 'Each named team picks up the tool it owns, so responsibility sits with the people who can act on it.'],
+      ['Check before deploy', 'The natural next step is a check that a newly built image actually carries all nine tools before it goes live.'],
+    ],
   },
   two: {
     label: 'AEGIS — Supply-Chain Defense',
-    blurb: 'Catching malicious code hidden inside the open-source packages our software depends on.',
+    blurb: 'Catching risky code hidden inside the open-source packages our software depends on.',
+
+    // Production scale, achieved by an earlier version of the tool. Kept and
+    // attributed rather than mixed in with the current version's results.
     packagesScanned: '5,675',
+
+    // The current architecture: five stages, each a standalone script.
+    // Stages 0-3 run on their own and only read. Stage 4 only runs on request.
     pipeline: [
-      { name: 'AEGIS', stereo: 'detector', ops: ['findVulnerable()', 'checkReachable()', 'markResolved()'] },
-      { name: 'FORGE', stereo: 'remediator', ops: ['proposeFix()', 'openBranch()', 'runTests()'] },
-      { name: 'LEDGER', stereo: 'recorder', ops: ['recordFinding()', 'trackState()', 'auditTrail()'] },
-      { name: 'WATCHTOWER', stereo: 'monitor', ops: ['watchFeeds()', 'raiseAlert()', 'reportDrift()'] },
+      {
+        n: '00', name: 'SCAN', net: 'Checks public databases',
+        d: 'Checks every package version the project installs — its "lockfile" — against public records of known flaws.',
+      },
+      {
+        n: '01', name: 'REACH', net: 'Stays offline',
+        d: 'Looks inside our own code for a real call to the flawed part, and says which of the three answers it found.',
+      },
+      {
+        n: '02', name: 'BLAST', net: 'Stays offline',
+        d: 'For reachable findings only: how much sits downstream, and whether it runs in production or only in tests.',
+      },
+      {
+        n: '03', name: 'REGRESS', net: 'Stays offline',
+        d: 'How well tested the affected files are, and how risky the upgrade looks — kept as two separate measures.',
+      },
+    ],
+    fix: {
+      n: '04', name: 'FIX',
+      d: 'Runs only when you ask for it by name. Builds a fix plan and works one step at a time.',
+      rails: [
+        'Every step needs explicit human approval',
+        'Refuses to touch a protected branch',
+        'Never merges, and never marks its own work resolved',
+      ],
+    },
+
+    honestyRule: 'Unknown is never reported as safe. If AEGIS cannot tell, it says so.',
+
+    verification: {
+      packages: '733',
+      bugs: '2',
+      repo: 'a real open-source project',
+      points: [
+        ['Tested end to end, not just reviewed',
+         'Ran the whole pipeline against a real open-source project and read all 733 packages out of its lockfile.'],
+        ['It failed loudly, which is the point',
+         'When the company network blocked the flaw-database lookup, SCAN reported an error instead of reporting "clean."'],
+        ['It refused to guess',
+         'Forced onto its weakest analysis method, REACH answered "can\'t prove" rather than calling anything safe.'],
+        ['The safety rails hold',
+         'FIX refused to run without explicit approval, and refused to touch a protected branch even once approved.'],
+      ],
+      bugsFixed: [
+        ['An honesty bug in my own code',
+         'A "can\'t prove" result was being described as if the flaw had been confirmed absent. Now the three answers stay distinct.'],
+        ['A reporting bug',
+         'The overall risk tier was read from the wrong place and printed as "Tier ?" in the most common case.'],
+      ],
+    },
+
+    next: [
+      ['Unblock the live lookups',
+       'The company security proxy presents a malformed certificate that modern security libraries correctly reject, so the lookups fail. The real fix is an inspection bypass. Meanwhile I built the workaround: the scan splits in two, so the lookup can run from an unblocked network.'],
+      ['Read code structure, not just text',
+       'Reachability currently falls back to searching text. With the right tooling present it reads the code\'s actual structure, which is far more accurate. That still needs a real run.'],
+      ['Get it into other people\'s hands',
+       'Packaged as a plugin so a developer can install it with one command. The install flow itself has not been run start to finish yet.'],
     ],
   },
   three: {
