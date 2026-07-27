@@ -43,10 +43,12 @@ VECTOR = [
      "Bar chart: 82 / 3,024 / 2,651 packages per run, from the earlier version."),
     (10, 17, "Project 03 — CVE-to-Patch", "match-rate-rings", "chart-match",
      "Before/after proportion rings: 0% matched by hand, 100% automated."),
-    (12, 19, "Project 03 — CVE-to-Patch", "consolidation-waffle", "chart-consolidation",
-     "209 squares, one per real fix-action; the 46 in red became tickets."),
-    (13, 20, "Project 03 — CVE-to-Patch", "dashboard-mockup", "dashboard-mock",
-     "Concept dashboard tying Tenable, Kevlar, ServiceNow and Wiz into one view."),
+    (11, 18, "Project 03 — CVE-to-Patch", "no-action-waffle", "chart-no-action",
+     "117 squares: 65 still needing a patch (red), 52 already covered (grey)."),
+    (13, 20, "Project 03 — CVE-to-Patch", "consolidation-waffle", "chart-consolidation",
+     "209 squares, one per row in Kevlar's report; the 46 in red became tickets."),
+    (15, 21, "Project 03 — CVE-to-Patch", "dashboard-mockup", "dashboard-mock",
+     "Concept dashboard tying Tenable, Kevlar, Jira and Wiz into one view."),
 ]
 
 # Native PowerPoint shapes: (order, slide, section, slug, crop box in inches, description)
@@ -63,10 +65,10 @@ NATIVE = [
      "The core rule, stages SCAN/REACH/BLAST/REGRESS, and the gated FIX stage."),
     (9, 14, "Project 02 — AEGIS", "aegis-next-steps", (0.75, 2.66, 12.58, 6.72),
      "Unblock live lookups, read code structure, and get it installed elsewhere."),
-    (11, 18, "Project 03 — CVE-to-Patch", "full-chain-flow", (0.75, 5.05, 12.58, 6.58),
-     "117 flaws to 209 fix-actions to newest-patch-only to 46 tickets."),
-    (14, 20, "Project 03 — CVE-to-Patch", "four-system-chain", (0.75, 3.30, 5.60, 6.70),
-     "Tenable to Kevlar to ServiceNow to Wiz, with each system's role."),
+    (12, 19, "Project 03 — CVE-to-Patch", "numbers-relate-flow", (0.75, 5.05, 12.58, 6.62),
+     "2,658 host-product assignments to Kevlar's 209 rows to 46 tickets."),
+    (16, 21, "Project 03 — CVE-to-Patch", "four-system-chain", (0.75, 3.30, 5.60, 6.70),
+     "Tenable to Kevlar to Jira to Wiz, with each system's role."),
 ]
 
 BRAND = [

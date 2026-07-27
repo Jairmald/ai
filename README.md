@@ -1,6 +1,6 @@
 # Internship Exit Presentation — Stewart Title
 
-A 21-slide exit presentation for Jair Maldonado's Security Analyst internship,
+A 22-slide exit presentation for Jair Maldonado's Information Security Analyst internship,
 built programmatically so it can be re-rendered and revised from source.
 
 Audience is mixed technical / non-technical, so every security term is explained
@@ -52,7 +52,7 @@ curl -sSL -o Montserrat.ttf \
 | `src/genart.js` | Writes the SVGs and rasterizes them to high-DPI PNGs. |
 | `src/chrome.js` | Reusable slide furniture — eyebrow, title, rule, cards, footer, logo. |
 | `src/slides/*.js` | One module per section. |
-| `build.js` | Assembles the 21 slides in order. |
+| `build.js` | Assembles the 22 slides in order. |
 
 ## Brand
 
@@ -111,12 +111,33 @@ distorted.
 13. AEGIS — proving it works
 14. AEGIS — what comes next
 15. **Divider — Project 03**
-16. CVE-to-Patch — the problem (117 flaws)
-17. CVE-to-Patch — manual to seconds (0% to 100%)
-18. CVE-to-Patch — what 209 means, and the rule that collapses it
-19. CVE-to-Patch — the payoff (209 to 46 tickets, 78% fewer)
-20. CVE-to-Patch — what comes next (one unified dashboard)
-21. Summary
+16. CVE-to-Patch — the problem (117 flaws, manual baseline)
+17. CVE-to-Patch — two days of work to twelve seconds
+18. CVE-to-Patch — 52 of the 117 needed no action
+19. CVE-to-Patch — where 209 came from, and the rule that collapses it
+20. CVE-to-Patch — the payoff (209 rows to 46 tickets)
+21. CVE-to-Patch — what comes next (one unified dashboard)
+22. Summary
+
+## CVE-to-Patch accuracy
+
+The numbers in this section are easy to get subtly wrong. What each one means:
+
+- **117** — flaws Kevlar tracked this cycle. A *filtered* set, not a sample:
+  every one was high or critical severity **and** directly affecting business
+  operations. Say so — it is the reason the count is credible.
+- **Manual baseline** (`~17.5 hours`) — a **reasoned estimate** at 8–10 minutes
+  per flaw, not a timed measurement, and it must stay labelled that way on
+  slide 16. It is *not* the old "18+ min" figure, which was the script's own
+  first broken run against a TLS-inspecting proxy — never present that as
+  analyst time.
+- **52 / 65** — cross-referencing showed 52 of the 117 needed no action at all;
+  only 65 were genuinely outstanding.
+- **209** — came from Kevlar's own KB Priority tab. It was **found, not
+  derived here**. The contribution was collapsing it, not discovering it.
+- **2,658** — real host-and-product combinations. The chain is
+  2,658 assignments → grouped by Kevlar into 209 rows → collapsed to 46.
+- **78%** — measured against Kevlar's 209, not against the 117.
 
 ## AEGIS accuracy
 

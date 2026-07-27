@@ -7,9 +7,9 @@
 
 const ABOUT = {
   name: 'Jair Maldonado',
-  role: 'Security Analyst Intern',
+  role: 'Information Security Analyst Intern',
   fields: [
-    ['Position', 'Security Analyst Intern — Information Security'],
+    ['Position', 'Information Security Analyst Intern'],
     ['School', 'Studying cybersecurity, with a focus on offensive security'],
     ['Background', 'Hands-on security work across vulnerability management, application security, and network security'],
     ['Certifications', 'Working toward the PWPA and PJPT practical certifications'],
@@ -136,13 +136,30 @@ const PROJECTS = {
   three: {
     label: 'CVE-to-Patch Automation',
     blurb: 'Turning a manual, one-at-a-time patch lookup into a job that finishes in seconds.',
+
+    // 117 is a filtered set, not a sample: every flaw on it was high or critical
+    // severity AND directly affecting business operations.
     flaws: '117',
+
+    // Manual baseline is a reasoned estimate from the steps involved, NOT a
+    // timed measurement. It must stay labelled as an estimate on the slide.
+    manualPerFlaw: '8–10 min',
+    manualTotal: '~17.5 hours',
+    manualDays: 'about 2 to 2.5 business days',
+
+    runtime: '~12 sec',
+    spotChecked: '29/29',
+
+    // Cross-referencing the fleet data against the 117 showed most of the work
+    // was already done by ordinary monthly patching.
+    noAction: '52',
+    outstanding: '65',
+
+    // 209 was already in Kevlar's own report — found, not derived here.
     fixActions: '209',
     tickets: '46',
+    absorbed: '163',
     reduction: '78%',
-    runtime: '~12 sec',
-    manual: '18+ min',
-    spotChecked: '29/29',
     combos: '2,658',
   },
 };
@@ -150,7 +167,7 @@ const PROJECTS = {
 const CLOSING = [
   { t: 'Left tools behind, not just results', d: 'The scripts and frameworks I built are still in use by the team after I go.' },
   { t: 'Worked across team lines', d: 'Vulnerability Management, Application Security and Network Security — plus Cloud Operations and Development.' },
-  { t: 'Built proof, not opinions', d: 'Every number in this deck was independently checked before I put it on a slide.' },
+  { t: 'Built proof, not opinions', d: 'Every number here is either measured and independently checked, or clearly labelled as an estimate.' },
   { t: 'Built to scale beyond one team', d: 'Each project was designed so another group can pick it up and run it.' },
 ];
 

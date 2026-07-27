@@ -16,7 +16,7 @@ function title(pptx) {
   K.text(s, 'STEWART TITLE  ·  INFORMATION SECURITY', {
     x: G.M, y: 2.52, w: 9, h: 0.26, ...T.eyebrow, color: ON_RED.eyebrow,
   });
-  K.text(s, 'Security Analyst\nInternship', {
+  K.text(s, 'Information Security\nAnalyst Internship', {
     x: G.M, y: 2.88, w: 9.4, h: 1.75, ...T.hero, lineSpacingMultiple: 0.96,
   });
   K.rule(s, { x: G.M, y: 4.78, w: 0.78, h: 0.06, color: C.white });

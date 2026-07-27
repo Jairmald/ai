@@ -338,6 +338,33 @@ function chartMatch(w = 720, h = 400) {
 }
 
 /**
+ * 117 tracked flaws: 65 genuinely outstanding (red) and 52 that needed no
+ * action at all (grey), because ordinary cumulative patching had already
+ * carried every machine past the fix. Same red-is-action convention as the
+ * consolidation waffle below.
+ */
+function chartNoAction() {
+  const total = 117, outstanding = 65;
+  const cols = 39, rows = 3;
+  const cell = 20, gap = 5;
+  const w = cols * cell + (cols - 1) * gap;
+  const h = rows * cell + (rows - 1) * gap;
+
+  let out = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`;
+  let n = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (n >= total) break;
+      const x = c * (cell + gap), y = r * (cell + gap);
+      out += `<rect x="${x}" y="${y}" width="${cell}" height="${cell}" rx="2.5"
+                fill="${n < outstanding ? hex(C.red) : hex(C.hairLight)}"/>`;
+      n++;
+    }
+  }
+  return out + `</svg>`;
+}
+
+/**
  * Slide 16: 209 fix-actions -> 46 tickets. A waffle field where every cell is
  * one real fix-action; the red block is what actually became a ticket.
  * Labels are placed as native pptx text on the slide, not baked in here.
@@ -425,7 +452,7 @@ function dashboardMock(w = 900, h = 520) {
   // right: the four-system chain
   const rx0 = px + pw + 16, rw = w - rx0 - pad;
   out += `<rect x="${rx0}" y="${py}" width="${rw}" height="${ph}" rx="9" fill="#FFFFFF" stroke="${hex(C.hairLight)}" stroke-width="1.4"/>`;
-  const chain = ['Tenable', 'Kevlar', 'ServiceNow', 'Wiz'];
+  const chain = ['Tenable', 'Kevlar', 'Jira', 'Wiz'];
   const rowH = (ph - 36) / chain.length;
   chain.forEach((s, i) => {
     const yy = py + 20 + i * rowH;
@@ -444,5 +471,5 @@ function dashboardMock(w = 900, h = 520) {
 
 module.exports = {
   redPanel, slashMark, hairTexture, logo, isoMachine,
-  supplyChain, chartPackages, chartMatch, chartConsolidation, dashboardMock,
+  supplyChain, chartPackages, chartMatch, chartNoAction, chartConsolidation, dashboardMock,
 };

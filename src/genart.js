@@ -42,6 +42,7 @@ function generate() {
     'supply-chain': A.supplyChain(),
     'chart-packages': A.chartPackages(),
     'chart-match': A.chartMatch(),
+    'chart-no-action': A.chartNoAction(),
     'chart-consolidation': A.chartConsolidation(),
     'dashboard-mock': A.dashboardMock(),
   };

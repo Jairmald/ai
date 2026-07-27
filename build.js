@@ -47,15 +47,16 @@ function buildDeck() {
   p2.proving(pptx);
   p2.next(pptx);
 
-  // 15-20 Project 03
+  // 15-21 Project 03
   p3.divider(pptx);
   p3.problem(pptx);
   p3.match(pptx);
+  p3.noAction(pptx);
   p3.granularity(pptx);
   p3.roi(pptx);
   p3.future(pptx);
 
-  // 21 closing
+  // 22 closing
   close.summary(pptx);
 
   return pptx;
