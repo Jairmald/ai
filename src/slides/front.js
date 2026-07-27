@@ -11,7 +11,7 @@ function title(pptx) {
   s.addImage({ path: K.img('panel-red'), x: 0, y: 0, w: G.W, h: G.H });
   s.addImage({ path: K.img('mark-slash'), x: 7.7, y: -0.9, w: 6.6, h: 6.6 });
 
-  K.logo(s, { variant: 'white', w: 1.62, x: G.M, y: 0.62 });
+  K.logo(s, { variant: 'white', w: 2.4, x: G.M, y: 0.62 });
 
   K.text(s, 'STEWART TITLE  ·  INFORMATION SECURITY', {
     x: G.M, y: 2.52, w: 9, h: 0.26, ...T.eyebrow, color: ON_RED.eyebrow,

@@ -77,8 +77,14 @@ function card(slide, { x, y, w, h, fill = C.white, shadow = SHADOW.card, line = 
   });
 }
 
-/** Logo lockup. Swap assets/gen/logo-*.png with the official file to replace. */
-function logo(slide, { variant = 'red', w = 1.22, x = null, y = 0.5 } = {}) {
+/**
+ * Logo lockup. Drop official artwork into assets/brand/ to replace it.
+ *
+ * Default width is set so the "Stewart Title" wordmark stays legible at slide
+ * scale; height follows the asset's real aspect, so a differently-proportioned
+ * official file will size itself correctly without touching this.
+ */
+function logo(slide, { variant = 'red', w = 1.8, x = null, y = 0.5 } = {}) {
   const h = w / logoAspect(variant);
   slide.addImage({
     path: img(variant === 'white' ? 'logo-white' : 'logo-red'),

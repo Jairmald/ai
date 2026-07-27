@@ -93,11 +93,11 @@ function logo(variant = 'red') {
   const apexX = xBot + 2 * PITCH + W + dx;   // 164
   const roof = `<path d="M ${apexX} ${yTop} L ${apexX + 17} ${yTop + 32} L ${apexX - 7} ${yTop + 32} Z" fill="${roofCol}"/>`;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="200" viewBox="0 0 900 200">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="200" viewBox="0 0 1200 200">
   ${slash(0)}${slash(1)}${slash(2)}
   ${roof}
   <text x="192" y="${yBot}" font-family="Montserrat Bold, Montserrat" font-size="79"
-        font-weight="700" letter-spacing="-0.5" fill="${wordCol}">stewart</text>
+        font-weight="700" letter-spacing="-0.5" fill="${wordCol}">Stewart Title</text>
 </svg>`;
 }
 
