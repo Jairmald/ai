@@ -1,6 +1,6 @@
 # Internship Exit Presentation — Stewart Title
 
-An 18-slide exit presentation for Jair Maldonado's Security Analyst internship,
+A 21-slide exit presentation for Jair Maldonado's Security Analyst internship,
 built programmatically so it can be re-rendered and revised from source.
 
 Audience is mixed technical / non-technical, so every security term is explained
@@ -52,7 +52,7 @@ curl -sSL -o Montserrat.ttf \
 | `src/genart.js` | Writes the SVGs and rasterizes them to high-DPI PNGs. |
 | `src/chrome.js` | Reusable slide furniture — eyebrow, title, rule, cards, footer, logo. |
 | `src/slides/*.js` | One module per section. |
-| `build.js` | Assembles the 18 slides in order. |
+| `build.js` | Assembles the 21 slides in order. |
 
 ## Brand
 
