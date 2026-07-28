@@ -38,6 +38,7 @@ const SLIDES = {
   'cve-209':          ['p3-cve',   'granularity',  'CVE_209'],
   'cve-roi':          ['p3-cve',   'roi',          'CVE_Payoff'],
   'cve-future':       ['p3-cve',   'future',       'CVE_Next'],
+  'outcomes':         ['close',    'outcomes',     'What_This_Means'],
   'thank-you':        ['close',    'summary',      'Thank_You'],
 };
 

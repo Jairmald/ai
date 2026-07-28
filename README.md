@@ -1,6 +1,6 @@
 # Internship Exit Presentation — Stewart Title
 
-A 23-slide exit presentation for Jair Maldonado's Information Security Analyst internship,
+A 24-slide exit presentation for Jair Maldonado's Information Security Analyst internship,
 built programmatically so it can be re-rendered and revised from source.
 
 Audience is mixed technical / non-technical, so every security term is explained
@@ -52,7 +52,7 @@ curl -sSL -o Montserrat.ttf \
 | `src/genart.js` | Writes the SVGs and rasterizes them to high-DPI PNGs. |
 | `src/chrome.js` | Reusable slide furniture — eyebrow, title, rule, cards, footer, logo. |
 | `src/slides/*.js` | One module per section. |
-| `build.js` | Assembles the 23 slides in order. |
+| `build.js` | Assembles the 24 slides in order. |
 
 ## Brand
 
@@ -118,7 +118,8 @@ distorted.
 20. CVE-to-Patch — why 65 flaws turn into 209 rows
 21. CVE-to-Patch — 209 rows became 46 tickets (the same fact, per machine)
 22. CVE-to-Patch — what comes next (dashboard as optional follow-up)
-23. Thank You — closing
+23. Summary — what this means for Stewart
+24. Thank You — closing
 
 Speaker notes carrying likely Q&A answers are attached to slides 5, 7, 9, 11,
 12, 14, 15, 17, 18, 19, 20 and 22.

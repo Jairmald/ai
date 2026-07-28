@@ -7,7 +7,66 @@
  */
 const { C, T, G, ON_RED } = require('../tokens');
 const K = require('../chrome');
-const { THANKS } = require('../content');
+const { THANKS, OUTCOMES, OUTCOMES_CLOSE } = require('../content');
+
+/**
+ * Slide 23 — the business wrap-up the contents page promises.
+ * Was/now per project, so it reads as a closing verdict rather than a repeat
+ * of the executive summary's problem/built/proof table.
+ */
+function outcomes(pptx) {
+  const s = K.contentSlide(pptx, {
+    eyebrow: 'Summary',
+    title: 'What this means for Stewart',
+    section: 'Summary',
+    num: 23,
+  });
+
+  K.text(s, 'Three gaps going in. Where each one stands now.', {
+    x: G.M, y: 2.14, w: 11.2, h: 0.34, ...T.lead, color: C.muted,
+  });
+
+  const top = 2.66, rowH = 1.2;
+  const wellX = 6.0, wellW = G.W - G.M - wellX;
+
+  OUTCOMES.forEach(([was, now], i) => {
+    const y = top + i * rowH;
+
+    K.text(s, String(i + 1).padStart(2, '0'), {
+      x: G.M, y: y + 0.08, w: 0.7, h: 0.4,
+      fontFace: 'Montserrat ExtraBold', fontSize: 24, color: 'DFBEC4', charSpacing: -0.4,
+    });
+    K.text(s, 'WAS', { x: G.M + 0.82, y: y + 0.02, w: 2, h: 0.2, ...T.micro, color: C.muted });
+    K.text(s, was, {
+      x: G.M + 0.82, y: y + 0.26, w: 3.62, h: 0.66, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.22,
+    });
+
+    K.text(s, '›', {
+      x: wellX - 0.66, y: y + 0.2, w: 0.4, h: 0.46, align: 'center', valign: 'middle',
+      fontFace: 'Montserrat', fontSize: 26, color: C.hair, bold: true,
+    });
+
+    s.addShape('roundRect', {
+      x: wellX, y: y - 0.04, w: wellW, h: 1.0, rectRadius: 0.05,
+      fill: { color: C.redTint }, line: { type: 'none' },
+    });
+    s.addShape('rect', { x: wellX, y: y - 0.04, w: 0.05, h: 1.0, fill: { color: C.red }, line: { type: 'none' } });
+    K.text(s, 'NOW', { x: wellX + 0.26, y: y + 0.1, w: 2, h: 0.2, ...T.micro, color: C.red });
+    K.text(s, now, {
+      x: wellX + 0.26, y: y + 0.34, w: wellW - 0.52, h: 0.6,
+      fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep, lineSpacingMultiple: 1.22,
+    });
+
+    if (i < OUTCOMES.length - 1) K.hairline(s, { y: y + 1.08 });
+  });
+
+  K.text(s, OUTCOMES_CLOSE, {
+    x: G.M, y: 6.34, w: G.contentW, h: 0.34,
+    fontFace: 'Montserrat SemiBold', fontSize: 12.5, color: C.red,
+  });
+
+  return s;
+}
 
 function summary(pptx) {
   const s = pptx.addSlide();
@@ -58,8 +117,8 @@ function summary(pptx) {
     x: G.M, y: 6.58, w: 8.4, h: 0.28, ...T.caption, color: ON_RED.body,
   });
 
-  K.footer(s, { section: 'Thank You', num: 23, dark: true });
+  K.footer(s, { section: 'Thank You', num: 24, dark: true });
   return s;
 }
 
-module.exports = { summary };
+module.exports = { outcomes, summary };

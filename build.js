@@ -57,7 +57,8 @@ function buildDeck() {
   p3.roi(pptx);
   p3.future(pptx);
 
-  // 23 closing
+  // 23-24 closing
+  close.outcomes(pptx);
   close.summary(pptx);
 
   return pptx;

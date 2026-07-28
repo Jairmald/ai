@@ -165,6 +165,22 @@ const PROJECTS = {
 };
 
 /**
+ * The business wrap-up, one row per project: what the problem was, and where
+ * it stands now. Deliberately framed as was/now rather than the executive
+ * summary's problem/built/proof, so the two slides do not read as a repeat.
+ */
+const OUTCOMES = [
+  ['Machines could ship without their security baseline.',
+   'Nine required tools named, owners assigned, and a written framework staged for Q4 sign-off.'],
+  ['Attackers hide malicious code inside the open-source packages we depend on.',
+   'AEGIS built and its safety rails tested — five stages, and 5,675 packages scanned in production by an earlier version.'],
+  ['Matching every tracked flaw to its patch took about two days of analyst time.',
+   '117 matched in ~12 seconds, and 209 rows collapsed to 46 tickets with nothing skipped.'],
+];
+
+const OUTCOMES_CLOSE = 'All three leave something behind: a written framework, a working scanner, and a script the team can run every cycle.';
+
+/**
  * The closing slide is a thank-you, not a summary of contributions — the
  * executive summary already makes that case. Teams named here are the ones
  * referenced elsewhere in the deck.
@@ -230,4 +246,4 @@ const NOTES = {
   p3Future: 'Q: Will this integrate with Jira? — The data is ready. The integration depends on a workflow decision with the team that owns ticketing. The scripts work today without it; the dashboard is the optional part.',
 };
 
-module.exports = { ABOUT, ROTATIONS, AGENTS, PROJECTS, THANKS, TOC, EXEC, NOTES };
+module.exports = { ABOUT, ROTATIONS, AGENTS, PROJECTS, THANKS, TOC, EXEC, NOTES, OUTCOMES, OUTCOMES_CLOSE };
