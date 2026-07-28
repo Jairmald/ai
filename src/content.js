@@ -164,11 +164,18 @@ const PROJECTS = {
   },
 };
 
-const CLOSING = [
-  { t: 'Left tools behind, not just results', d: 'The scripts and frameworks I built are still in use by the team after I go.' },
-  { t: 'Worked across team lines', d: 'Vulnerability Management, Application Security and Network Security — plus Cloud Operations and Development.' },
-  { t: 'Built proof, not opinions', d: 'Every number here is either measured and independently checked, or clearly labelled as an estimate.' },
-  { t: 'Built to scale beyond one team', d: 'Each project was designed so another group can pick it up and run it.' },
+/**
+ * The closing slide is a thank-you, not a summary of contributions — the
+ * executive summary already makes that case. Teams named here are the ones
+ * referenced elsewhere in the deck.
+ */
+const THANKS = [
+  ['To the Information Security team',
+   'For handing me problems that actually mattered, and trusting me to work on them properly.'],
+  ['To Vulnerability Management, Application Security and Network Security',
+   'Three rotations, three different ways of looking at the same job. I learned something distinct in each one.'],
+  ['To Cloud Operations and Development',
+   'For making time for someone from another team who kept turning up with questions.'],
 ];
 
 // Descriptions lead with business impact, not the technical activity — the
@@ -223,4 +230,4 @@ const NOTES = {
   p3Future: 'Q: Will this integrate with Jira? — The data is ready. The integration depends on a workflow decision with the team that owns ticketing. The scripts work today without it; the dashboard is the optional part.',
 };
 
-module.exports = { ABOUT, ROTATIONS, AGENTS, PROJECTS, CLOSING, TOC, EXEC, NOTES };
+module.exports = { ABOUT, ROTATIONS, AGENTS, PROJECTS, THANKS, TOC, EXEC, NOTES };

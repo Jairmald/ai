@@ -118,7 +118,7 @@ distorted.
 20. CVE-to-Patch — where 209 came from, and the rule that collapses it
 21. CVE-to-Patch — the payoff (209 rows to 46 tickets)
 22. CVE-to-Patch — what comes next (dashboard as optional follow-up)
-23. Summary
+23. Thank You — closing
 
 Speaker notes carrying likely Q&A answers are attached to slides 3, 7, 9, 11,
 12, 14, 15, 17, 18, 19, 20 and 22.

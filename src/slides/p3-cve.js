@@ -331,8 +331,8 @@ function future(pptx) {
   });
 
   const x0 = G.M, w = 4.55;
-  K.text(s, 'Today these four systems each hold one piece of the story, and someone stitches them together by hand. A single view would close that gap.', {
-    x: x0, y: 2.2, w, h: 0.8, ...T.body, color: C.muted, lineSpacingMultiple: 1.28,
+  K.text(s, 'Two views would close the gap: an SLA remediation dashboard showing whether flaws are fixed inside their deadline, and a patching dashboard showing how much of the fleet is current.', {
+    x: x0, y: 2.2, w, h: 0.9, ...T.body, color: C.muted, lineSpacingMultiple: 1.28,
   });
 
   const chain = [
@@ -341,7 +341,7 @@ function future(pptx) {
     ['Jira', 'opens the ticket'],
     ['Wiz', 'confirms the machine is real and reachable'],
   ];
-  let y = 3.34;
+  let y = 3.26;
   chain.forEach(([name, role], i) => {
     s.addShape('ellipse', {
       x: x0 + 0.02, y: y + 0.07, w: 0.2, h: 0.2,
@@ -364,13 +364,13 @@ function future(pptx) {
     K.text(s, role, {
       x: x0 + 0.4, y: y + 0.28, w: w - 0.45, h: 0.3, ...T.bodySm, color: C.muted,
     });
-    y += 0.72;
+    y += 0.64;
   });
 
   K.text(s, [
     { text: 'To be clear: ', options: { fontFace: 'Montserrat SemiBold', fontSize: 11, color: C.inkDeep } },
     { text: 'the scripts are done and tested. The dashboard is optional follow-up work for whoever picks up the pipeline — not a dependency.', options: { fontFace: 'Montserrat', fontSize: 11, color: C.muted } },
-  ], { x: x0, y: 6.06, w, h: 0.62, lineSpacingMultiple: 1.2 });
+  ], { x: x0, y: 5.96, w, h: 0.6, lineSpacingMultiple: 1.2 });
 
   // dashboard mockup
   const artX = 5.86, artW = G.W - G.M - artX, artY = 2.3;

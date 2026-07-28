@@ -394,7 +394,13 @@ function chartConsolidation() {
 // ---------------------------------------------------------------------------
 // Slide 17 — unified dashboard mockup
 // ---------------------------------------------------------------------------
-function dashboardMock(w = 900, h = 520) {
+/**
+ * Slide 22 — concept dashboard. Shows the two views the team actually wants:
+ * SLA remediation (are we fixing things inside the deadline each severity
+ * sets?) and patching status (how much of the fleet is actually current?).
+ * Figures in the panels are illustrative; the KPI tiles use the real numbers.
+ */
+function dashboardMock(w = 900, h = 540) {
   const pad = 18;
   let out = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
   <defs>
@@ -419,51 +425,70 @@ function dashboardMock(w = 900, h = 520) {
     <rect x="96" y="22" width="188" height="18" rx="9" fill="#FFFFFF" opacity="0.30"/>
   </g>`;
 
-  // four KPI tiles
-  const tileW = (w - pad * 2 - 3 * 14) / 4, tileY = 78, tileH = 96;
-  const tiles = [
+  // KPI tiles — these carry the real numbers
+  const tileW = (w - pad * 2 - 3 * 14) / 4, tileY = 78, tileH = 92;
+  [
     { v: '117', l: 'flaws found' },
     { v: '209', l: 'fix actions' },
     { v: '46', l: 'tickets' },
     { v: '78%', l: 'reduction' },
-  ];
-  tiles.forEach((t, i) => {
+  ].forEach((t, i) => {
     const x = pad + i * (tileW + 14);
     out += `<rect x="${x}" y="${tileY}" width="${tileW}" height="${tileH}" rx="9" fill="${hex(C.card)}" stroke="${hex(C.hairLight)}" stroke-width="1.2"/>
             <rect x="${x}" y="${tileY}" width="4" height="${tileH}" rx="2" fill="${hex(C.red)}"/>
-            <text x="${x + tileW / 2}" y="${tileY + 50}" text-anchor="middle" font-family="Montserrat ExtraBold, Montserrat"
-                  font-size="34" fill="${hex(C.red)}">${t.v}</text>
-            <text x="${x + tileW / 2}" y="${tileY + 74}" text-anchor="middle" font-family="Montserrat Medium, Montserrat"
+            <text x="${x + tileW / 2}" y="${tileY + 48}" text-anchor="middle" font-family="Montserrat ExtraBold, Montserrat"
+                  font-size="32" fill="${hex(C.red)}">${t.v}</text>
+            <text x="${x + tileW / 2}" y="${tileY + 72}" text-anchor="middle" font-family="Montserrat Medium, Montserrat"
                   font-size="13" fill="${hex(C.muted)}">${t.l}</text>`;
   });
 
-  // left: trend bars
-  const px = pad, py = tileY + tileH + 20, pw = w * 0.56 - pad, ph = h - py - pad;
-  out += `<rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="9" fill="#FFFFFF" stroke="${hex(C.hairLight)}" stroke-width="1.4"/>`;
-  const bvals = [0.42, 0.58, 0.5, 0.72, 0.64, 0.88, 0.78];
-  const bW = 34, bGap = (pw - 48 - bvals.length * bW) / (bvals.length - 1);
-  bvals.forEach((v, i) => {
-    const bh = (ph - 74) * v;
-    const bx = px + 24 + i * (bW + bGap);
-    out += `<rect x="${bx}" y="${py + ph - 34 - bh}" width="${bW}" height="${bh}" rx="4" fill="url(#bar2)" opacity="${0.55 + i * 0.06}"/>`;
-  });
-  out += `<line x1="${px + 18}" y1="${py + ph - 34}" x2="${px + pw - 18}" y2="${py + ph - 34}" stroke="${hex(C.hair)}" stroke-width="1.4"/>`;
+  const panelY = 190, panelH = h - panelY - pad;
+  const aW = 496, bX = pad + aW + 16, bW = w - bX - pad;
 
-  // right: the four-system chain
-  const rx0 = px + pw + 16, rw = w - rx0 - pad;
-  out += `<rect x="${rx0}" y="${py}" width="${rw}" height="${ph}" rx="9" fill="#FFFFFF" stroke="${hex(C.hairLight)}" stroke-width="1.4"/>`;
-  const chain = ['Tenable', 'Kevlar', 'Jira', 'Wiz'];
-  const rowH = (ph - 36) / chain.length;
-  chain.forEach((s, i) => {
-    const yy = py + 20 + i * rowH;
-    out += `<circle cx="${rx0 + 34}" cy="${yy + rowH / 2 - 6}" r="11" fill="${hex(C.redTint)}" stroke="${hex(C.red)}" stroke-width="2.2"/>
-            <circle cx="${rx0 + 34}" cy="${yy + rowH / 2 - 6}" r="4" fill="${hex(C.red)}"/>
-            <text x="${rx0 + 58}" y="${yy + rowH / 2 - 1}" font-family="Montserrat SemiBold, Montserrat"
-                  font-size="15" fill="${hex(C.inkDeep)}">${s}</text>`;
-    if (i < chain.length - 1) {
-      out += `<line x1="${rx0 + 34}" y1="${yy + rowH / 2 + 7}" x2="${rx0 + 34}" y2="${yy + rowH + rowH / 2 - 20}"
-                stroke="${hex(C.red)}" stroke-width="2" stroke-dasharray="4 4" opacity="0.6"/>`;
-    }
+  // Panel A — SLA remediation: days to fix against the deadline each severity sets
+  out += `<rect x="${pad}" y="${panelY}" width="${aW}" height="${panelH}" rx="9" fill="#FFFFFF" stroke="${hex(C.hairLight)}" stroke-width="1.4"/>
+          <text x="${pad + 22}" y="${panelY + 30}" font-family="Montserrat SemiBold, Montserrat"
+                font-size="14" letter-spacing="1.2" fill="${hex(C.red)}">SLA REMEDIATION</text>
+          <text x="${pad + 22}" y="${panelY + 52}" font-family="Montserrat Medium, Montserrat"
+                font-size="12" fill="${hex(C.muted)}">Days to fix vs the deadline each severity sets</text>`;
+
+  const plotT = panelY + 70, plotB = panelY + panelH - 46;
+  const plotH = plotB - plotT, plotL = pad + 26, plotR = pad + aW - 24;
+  const target = 0.58;                       // the SLA line, as a share of the plot
+  const vals = [0.34, 0.51, 0.86, 0.42, 0.71, 0.29, 0.95, 0.46];
+  const bw = 34, bgap = (plotR - plotL - vals.length * bw) / (vals.length - 1);
+
+  vals.forEach((v, i) => {
+    const bh = plotH * v;
+    const bx = plotL + i * (bw + bgap);
+    const breach = v > target;
+    out += `<rect x="${bx}" y="${plotB - bh}" width="${bw}" height="${bh}" rx="4"
+              fill="${breach ? hex(C.red) : hex(C.hair)}"/>`;
+  });
+  const ty = plotB - plotH * target;
+  out += `<line x1="${plotL - 8}" y1="${ty}" x2="${plotR + 8}" y2="${ty}" stroke="${hex(C.inkDeep)}"
+            stroke-width="2" stroke-dasharray="7 5"/>
+          <text x="${plotR + 4}" y="${ty - 8}" text-anchor="end" font-family="Montserrat SemiBold, Montserrat"
+                font-size="11.5" fill="${hex(C.inkDeep)}">SLA deadline</text>
+          <line x1="${plotL - 8}" y1="${plotB}" x2="${plotR + 8}" y2="${plotB}" stroke="${hex(C.hair)}" stroke-width="1.4"/>
+          <text x="${plotL - 8}" y="${plotB + 26}" font-family="Montserrat Medium, Montserrat"
+                font-size="11.5" fill="${hex(C.red)}">Red = past the deadline</text>`;
+
+  // Panel B — patching status across the fleet
+  out += `<rect x="${bX}" y="${panelY}" width="${bW}" height="${panelH}" rx="9" fill="#FFFFFF" stroke="${hex(C.hairLight)}" stroke-width="1.4"/>
+          <text x="${bX + 22}" y="${panelY + 30}" font-family="Montserrat SemiBold, Montserrat"
+                font-size="14" letter-spacing="1.2" fill="${hex(C.red)}">PATCHING STATUS</text>
+          <text x="${bX + 22}" y="${panelY + 52}" font-family="Montserrat Medium, Montserrat"
+                font-size="12" fill="${hex(C.muted)}">Share of the fleet already current</text>`;
+
+  const rows = [['Server 2019', 0.93], ['Server 2022', 0.86], ['Windows 11', 0.74], ['Windows 10', 0.58]];
+  const rowY = panelY + 80, rowGap = 54, trackW = bW - 44;
+  rows.forEach(([label, pct], i) => {
+    const y = rowY + i * rowGap;
+    out += `<text x="${bX + 22}" y="${y}" font-family="Montserrat Medium, Montserrat"
+                  font-size="12.5" fill="${hex(C.ink)}">${label}</text>
+            <rect x="${bX + 22}" y="${y + 10}" width="${trackW}" height="12" rx="6" fill="${hex(C.hairLight)}"/>
+            <rect x="${bX + 22}" y="${y + 10}" width="${(trackW * pct).toFixed(1)}" height="12" rx="6" fill="url(#bar2)"/>`;
   });
 
   return out + `</svg>`;
