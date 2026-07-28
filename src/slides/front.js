@@ -67,10 +67,10 @@ function execSummary(pptx) {
     eyebrow: 'Executive Summary',
     title: 'Three problems, three working solutions',
     section: 'Executive Summary',
-    num: 3,
+    num: 5,
   });
 
-  K.text(s, 'Three separate gaps, three things the team keeps using. This is the whole story on one slide.', {
+  K.text(s, 'One from each rotation. Three separate gaps, three things the team keeps using — then the detail on each.', {
     x: G.M, y: 2.14, w: 11.2, h: 0.34, ...T.lead, color: C.muted,
   });
 
@@ -98,7 +98,7 @@ function execSummary(pptx) {
       fill: { color: C.redTint }, line: { type: 'none' },
     });
     K.text(s, r.proof, {
-      x: colX[2], y: y + 0.02, w: colW[2] - 0.2, h: 0.72,
+      x: colX[2], y: y - 0.12, w: colW[2] - 0.2, h: 0.94, valign: 'middle',
       fontFace: 'Montserrat SemiBold', fontSize: 11, color: C.red, lineSpacingMultiple: 1.24,
     });
     if (i < EXEC.length - 1) K.hairline(s, { y: y + 1.06 });
@@ -152,7 +152,7 @@ function about(pptx) {
 
   K.logo(s, { variant: 'red' });
   // footer confined to the white column so the rule never crosses the red panel
-  K.footer(s, { section: 'About Me', num: 4, x, w });
+  K.footer(s, { section: 'About Me', num: 3, x, w });
   return s;
 }
 
@@ -164,7 +164,7 @@ function overview(pptx) {
     eyebrow: 'Internship Overview',
     title: 'Three rotations across the security team',
     section: 'Internship Overview',
-    num: 5,
+    num: 4,
   });
 
   K.text(s, 'I moved through three different areas of Information Security. Each rotation produced one project.', {

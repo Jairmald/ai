@@ -98,9 +98,9 @@ distorted.
 
 1. Title
 2. Table of Contents
-3. Executive Summary — three problems, three solutions, three proofs
-4. About Me
-5. Internship Overview — three rotations
+3. About Me
+4. Internship Overview — three rotations
+5. Executive Summary — three problems, three solutions, three proofs
 6. **Divider — Project 01**
 7. Image Management Program — the problem (nine required tools)
 8. Image Management Program — building the process
@@ -120,7 +120,7 @@ distorted.
 22. CVE-to-Patch — what comes next (dashboard as optional follow-up)
 23. Thank You — closing
 
-Speaker notes carrying likely Q&A answers are attached to slides 3, 7, 9, 11,
+Speaker notes carrying likely Q&A answers are attached to slides 5, 7, 9, 11,
 12, 14, 15, 17, 18, 19, 20 and 22.
 
 ## CVE-to-Patch accuracy

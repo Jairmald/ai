@@ -30,9 +30,9 @@ function buildDeck() {
   // 1-5 front matter
   front.title(pptx);
   front.toc(pptx);
-  front.execSummary(pptx);
   front.about(pptx);
   front.overview(pptx);
+  front.execSummary(pptx);
 
   // 6-9 Project 01
   p1.divider(pptx);

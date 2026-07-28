@@ -53,7 +53,7 @@ VECTOR = [
 
 # Native PowerPoint shapes: (order, slide, section, slug, crop box in inches, description)
 NATIVE = [
-    (1, 5, "Internship Overview", "three-rotations-timeline", (0.75, 2.95, 12.58, 6.25),
+    (1, 4, "Internship Overview", "three-rotations-timeline", (0.75, 2.95, 12.58, 6.25),
      "Timeline spine with three rotation cards."),
     (3, 7, "Project 01 — Image Management", "nine-required-tools", (4.52, 2.75, 12.58, 6.50),
      "3x3 grid of the nine required security tools, plus the gap callout."),
