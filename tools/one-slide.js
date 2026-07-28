@@ -2,10 +2,12 @@
  * Build a single slide into its own .pptx, for copy-pasting into another deck.
  *
  *   node tools/one-slide.js exec-summary
+ *   node tools/one-slide.js cve-problem cve-match --name=CVE_Section
  *   node tools/one-slide.js --list
  *
- * The slide is rendered by the same builder the full deck uses, so it stays
- * identical to its counterpart — including its footer slide number.
+ * Several keys build one file containing those slides in the order given.
+ * Slides are rendered by the same builder the full deck uses, so they stay
+ * identical to their counterparts — including their footer slide numbers.
  */
 const fs = require('fs');
 const path = require('path');
@@ -40,17 +42,16 @@ const SLIDES = {
 };
 
 async function main() {
-  const key = process.argv[2];
-  if (!key || key === '--list') {
+  const keys = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+  const outName = (process.argv.find((a) => a.startsWith('--name=')) || '').slice(7);
+  if (!keys.length || process.argv.includes('--list')) {
     console.log('slides:\n  ' + Object.keys(SLIDES).join('\n  '));
     return;
   }
-  const entry = SLIDES[key];
-  if (!entry) {
-    console.error(`unknown slide "${key}" — run with --list`);
-    process.exit(1);
+  for (const k of keys) {
+    if (!SLIDES[k]) { console.error(`unknown slide "${k}" — run with --list`); process.exit(1); }
   }
-  const [mod, fn, base] = entry;
+  const base = outName || SLIDES[keys[0]][2];
 
   if (!process.argv.includes('--no-art')) generate();
 
@@ -60,7 +61,11 @@ async function main() {
   pptx.author = 'Jair Maldonado';
   pptx.company = 'Stewart Title';
 
-  require(path.join(ROOT, 'src', 'slides', mod))[fn](pptx);
+  // built in the order given, so a run of slides keeps its narrative sequence
+  for (const k of keys) {
+    const [mod, fn] = SLIDES[k];
+    require(path.join(ROOT, 'src', 'slides', mod))[fn](pptx);
+  }
 
   const outDir = path.join(ROOT, 'out', 'slides');
   fs.mkdirSync(outDir, { recursive: true });

@@ -123,56 +123,61 @@ function match(pptx) {
 function noAction(pptx) {
   const s = K.contentSlide(pptx, {
     eyebrow: 'Project 03  ·  The Finding',
-    title: '52 of the 117 needed no action at all',
+    title: '52 of the 117 were already fixed',
     section: 'CVE-to-Patch Automation',
     num: 19,
   });
 
-  K.text(s, 'Cross-referencing the matched patches against the real fleet turned up something better than a faster process: a large share of the work did not need doing in the first place.', {
-    x: G.M, y: 2.14, w: 11.2, h: 0.34, ...T.lead, color: C.muted,
+  // The single fact that explains this slide and the next two.
+  const fy = 2.02;
+  s.addShape('roundRect', {
+    x: G.M, y: fy, w: G.contentW, h: 0.66, rectRadius: 0.06,
+    fill: { color: C.redTint }, line: { type: 'none' },
   });
+  s.addShape('rect', { x: G.M, y: fy, w: 0.055, h: 0.66, fill: { color: C.red }, line: { type: 'none' } });
+  K.text(s, [
+    { text: 'THE ONE FACT   ', options: { fontFace: 'Montserrat SemiBold', fontSize: 9, charSpacing: 1.4, color: C.red } },
+    { text: 'Windows updates are cumulative. Installing the newest one automatically includes every older fix — exactly like a phone update.', options: { fontFace: 'Montserrat SemiBold', fontSize: 12.5, color: C.inkDeep } },
+  ], { x: G.M + 0.26, y: fy + 0.22, w: G.contentW - 0.5, h: 0.34 });
 
-  // two anchors: what was left, and what fell away
-  const cw2 = 5.66, gapX = 0.31, sy = 2.66, sh = 1.44;
+  // the fact, drawn
+  const artW = 7.15, artY = 2.92;
+  K.placeImage(s, 'cumulative-patch', { x: G.M, y: artY, w: artW });
+
+  // what it meant across the fleet
+  const x0 = 8.4, w = G.W - G.M - x0;
+  K.text(s, 'SO WHEN WE CHECKED ALL 117', { x: x0, y: 2.96, w, h: 0.22, ...T.micro, color: C.red });
+
   const cards = [
-    { v: P.outstanding, l: 'flaws genuinely outstanding', tone: 'red' },
-    { v: P.noAction, l: 'flaws needing no action at all', tone: 'plain' },
+    { v: P.noAction, l: 'were already fixed on every\nmachine — nothing to do', tone: 'plain' },
+    { v: P.outstanding, l: 'were genuinely still open\nsomewhere', tone: 'red' },
   ];
   cards.forEach((c, i) => {
-    const x = G.M + i * (cw2 + gapX);
+    const y = 3.32 + i * 1.06;
     const red = c.tone === 'red';
-    K.card(s, { x, y: sy, w: cw2, h: sh, fill: red ? C.redTint : C.card, line: red ? C.red : C.hairLight });
+    K.card(s, { x: x0, y, w, h: 0.94, fill: red ? C.redTint : C.card, line: red ? C.red : C.hairLight });
     K.text(s, c.v, {
-      x: x + 0.34, y: sy + 0.26, w: 1.9, h: 0.76,
-      fontFace: 'Montserrat ExtraBold', fontSize: 46, color: red ? C.red : C.inkDeep, charSpacing: -1.8,
+      x: x0 + 0.22, y: y + 0.16, w: 1.2, h: 0.62,
+      fontFace: 'Montserrat ExtraBold', fontSize: 36, color: red ? C.red : C.inkDeep, charSpacing: -1.4,
     });
     K.text(s, c.l, {
-      x: x + 2.3, y: sy + 0.5, w: cw2 - 2.64, h: 0.5,
-      fontFace: 'Montserrat SemiBold', fontSize: 13, color: red ? C.inkDeep : C.muted, lineSpacingMultiple: 1.15,
+      x: x0 + 1.5, y: y + 0.2, w: w - 1.72, h: 0.58,
+      ...T.caption, color: C.muted, lineSpacingMultiple: 1.2,
     });
   });
 
-  // 117 squares, one per tracked flaw
-  const wy = 4.36;
-  K.text(s, 'EVERY SQUARE IS ONE TRACKED FLAW', {
-    x: G.M, y: wy, w: 7, h: 0.22, ...T.micro, color: C.red,
-  });
-  const artH = K.placeImage(s, 'chart-no-action', { x: G.M, y: wy + 0.28, w: G.contentW });
-
-  const ly = wy + 0.38 + artH;
+  // proportion, one square per tracked flaw
+  const wy = 5.5;
+  const wArtH = K.placeImage(s, 'chart-no-action', { x: G.M, y: wy, w: G.contentW });
+  const ly = wy + 0.08 + wArtH;
   K.text(s, '65 still needed patching', {
     x: G.M, y: ly, w: 5, h: 0.28,
     fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.red,
   });
-  K.text(s, '52 already covered by routine monthly patching', {
-    x: G.W - G.M - 6, y: ly, w: 6, h: 0.28, align: 'right',
+  K.text(s, '52 already covered — nobody had to do anything for these', {
+    x: G.W - G.M - 7, y: ly, w: 7, h: 0.28, align: 'right',
     fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.muted,
   });
-
-  K.text(s, [
-    { text: 'Why: ', options: { fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep } },
-    { text: 'routine monthly patching had already carried every machine past the fix for those 52 — so the patching process is working better than we assumed. We were tracking work that was already done.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
-  ], { x: G.M, y: 6.22, w: G.contentW, h: 0.34 });
 
   s.addNotes(NOTES.p3NoAction);
   return s;
@@ -184,55 +189,47 @@ function noAction(pptx) {
 function granularity(pptx) {
   const s = K.contentSlide(pptx, {
     eyebrow: 'Project 03  ·  Going Deeper',
-    title: 'Matching the flaws was only half the job',
+    title: 'Why 65 flaws turn into 209 rows',
     section: 'CVE-to-Patch Automation',
     num: 20,
   });
 
-  const cardW = 5.66, gap = 0.31, top = 2.22, cardH = 2.42;
+  K.text(s, 'One flaw does not mean one patch. The same flaw needs a differently numbered patch on each version of Windows we run — so one flaw becomes several rows on the list.', {
+    x: G.M, y: 2.14, w: 11.2, h: 0.34, ...T.lead, color: C.muted,
+  });
 
-  // card A — 209 was already in Kevlar's report; it was found, not derived
-  K.card(s, { x: G.M, y: top, w: cardW, h: cardH, fill: C.white });
+  // the fan-out, drawn
+  const artW = 6.5, artY = 2.68;
+  K.placeImage(s, 'one-flaw-many-patches', { x: G.M - 0.1, y: artY, w: artW });
+
+  // where 209 actually came from
+  const x0 = 7.6, w = G.W - G.M - x0;
+  K.card(s, { x: x0, y: 2.68, w, h: 2.42, fill: C.white });
   K.text(s, 'WHERE 209 COMES FROM', {
-    x: G.M + 0.34, y: top + 0.3, w: cardW - 0.68, h: 0.22, ...T.micro, color: C.red,
+    x: x0 + 0.32, y: 2.94, w: w - 0.64, h: 0.22, ...T.micro, color: C.red,
   });
-  K.text(s, 'Kevlar\'s own report', {
-    x: G.M + 0.34, y: top + 0.6, w: cardW - 0.68, h: 0.42,
-    fontFace: 'Montserrat ExtraBold', fontSize: 24, color: C.inkDeep, charSpacing: -0.7,
+  K.text(s, 'Kevlar’s own report', {
+    x: x0 + 0.32, y: 3.22, w: w - 0.64, h: 0.42,
+    fontFace: 'Montserrat ExtraBold', fontSize: 22, color: C.inkDeep, charSpacing: -0.7,
   });
-  K.text(s, 'Kevlar publishes its own prioritisation report, and its KB Priority tab already held 209 rows — one for each unique pairing of flaw-set and operating-system product. I found that number in the data; I did not calculate it.', {
-    x: G.M + 0.34, y: top + 1.18, w: cardW - 0.68, h: 1.0, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.26,
-  });
-
-  // card B — the rule, and the fact that applying it was the contribution
-  const bx = G.M + cardW + gap;
-  K.card(s, { x: bx, y: top, w: cardW, h: cardH, fill: C.white });
-  K.text(s, 'WHAT I ACTUALLY DID', {
-    x: bx + 0.34, y: top + 0.3, w: cardW - 0.68, h: 0.22, ...T.micro, color: C.red,
-  });
-  K.text(s, 'Highest build wins', {
-    x: bx + 0.34, y: top + 0.6, w: cardW - 0.68, h: 0.42,
-    fontFace: 'Montserrat ExtraBold', fontSize: 24, color: C.inkDeep, charSpacing: -0.7,
-  });
-  K.text(s, 'Windows updates supersede every earlier fix on that branch, so for each machine-and-product pair only the highest fixed-build patch is needed. Applying that rule — and proving it lost nothing — collapsed the 209 rows to 46.', {
-    x: bx + 0.34, y: top + 1.18, w: cardW - 0.68, h: 1.0, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.26,
+  K.text(s, 'Do that fan-out for all 65 open flaws, across every Windows version in the fleet, and it adds up to 209 rows. Kevlar already publishes that list — I opened it and counted, I did not calculate it.', {
+    x: x0 + 0.32, y: 3.76, w: w - 0.64, h: 1.1, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.26,
   });
 
-  // flow strip — ties the three numbers together
-  const fy = 5.12;
-  K.text(s, 'HOW THE NUMBERS RELATE', { x: G.M, y: fy, w: 6, h: 0.22, ...T.micro, color: C.red });
+  // the whole chain, in order
+  const fy = 5.3;
+  K.text(s, 'THE WHOLE CHAIN', { x: G.M, y: fy, w: 6, h: 0.22, ...T.micro, color: C.red });
 
   const steps = [
-    { v: P.combos, l: 'host and product\nassignments in the fleet' },
-    { v: '209', l: 'rows Kevlar grouped\nthem into' },
-    { v: 'RULE', l: 'highest build\nwins' },
-    { v: '46', l: 'tickets actually\nopened' },
+    { v: P.flaws, l: 'flaws tracked' },
+    { v: P.outstanding, l: 'still open' },
+    { v: P.fixActions, l: 'rows once split\nby Windows version' },
+    { v: P.tickets, l: 'tickets, after the\nnext slide’s rule' },
   ];
-  const sw = 2.72, sgap = (G.contentW - sw * 4) / 3, sy = fy + 0.32, sh = 1.16;
+  const sw = 2.72, sgap = (G.contentW - sw * 4) / 3, sy = fy + 0.32, sh = 1.02;
   steps.forEach((st, i) => {
     const x = G.M + i * (sw + sgap);
     const isLast = i === 3;
-    const isRule = st.v === 'RULE';
     s.addShape('roundRect', {
       x, y: sy, w: sw, h: sh, rectRadius: 0.06,
       fill: { color: isLast ? C.red : C.card },
@@ -240,18 +237,17 @@ function granularity(pptx) {
       shadow: isLast ? SHADOW.red : SHADOW.none,
     });
     K.text(s, st.v, {
-      x: x + 0.2, y: sy + 0.16, w: sw - 0.4, h: 0.46, align: 'center',
-      fontFace: 'Montserrat ExtraBold', fontSize: isRule ? 17 : 26,
-      color: isLast ? C.white : C.inkDeep, charSpacing: isRule ? 1.2 : -0.9,
-      valign: 'middle',
+      x: x + 0.2, y: sy + 0.12, w: sw - 0.4, h: 0.44, align: 'center',
+      fontFace: 'Montserrat ExtraBold', fontSize: 25,
+      color: isLast ? C.white : C.inkDeep, charSpacing: -0.9, valign: 'middle',
     });
     K.text(s, st.l, {
-      x: x + 0.16, y: sy + 0.64, w: sw - 0.32, h: 0.44, align: 'center',
+      x: x + 0.16, y: sy + 0.58, w: sw - 0.32, h: 0.4, align: 'center',
       ...T.caption, color: isLast ? ON_RED.eyebrow : C.muted, lineSpacingMultiple: 1.15,
     });
     if (i < 3) {
       K.text(s, '›', {
-        x: x + sw + sgap / 2 - 0.2, y: sy + 0.35, w: 0.4, h: 0.46, align: 'center', valign: 'middle',
+        x: x + sw + sgap / 2 - 0.2, y: sy + 0.28, w: 0.4, h: 0.46, align: 'center', valign: 'middle',
         fontFace: 'Montserrat', fontSize: 26, color: C.hair, bold: true,
       });
     }
@@ -272,49 +268,78 @@ function roi(pptx) {
     num: 21,
   });
 
-  // headline stat row
-  const stats = [
-    { v: P.fixActions, l: 'rows in Kevlar\u2019s own\nKB Priority report', tone: 'plain' },
-    { v: P.tickets, l: 'tickets actually opened\nafter applying the rule', tone: 'red' },
-    { v: P.reduction, l: 'fewer than the report\nimplied \u2014 163 absorbed', tone: 'red' },
+  // the same fact as slide 19, now applied to a single machine
+  const fy = 2.02;
+  s.addShape('roundRect', {
+    x: G.M, y: fy, w: G.contentW, h: 0.66, rectRadius: 0.06,
+    fill: { color: C.redTint }, line: { type: 'none' },
+  });
+  s.addShape('rect', { x: G.M, y: fy, w: 0.055, h: 0.66, fill: { color: C.red }, line: { type: 'none' } });
+  K.text(s, [
+    { text: 'THE SAME FACT AGAIN   ', options: { fontFace: 'Montserrat SemiBold', fontSize: 9, charSpacing: 1.4, color: C.red } },
+    { text: 'Only now applied to one machine at a time — because the newest patch already contains the older ones, most of those rows are the same job twice.', options: { fontFace: 'Montserrat SemiBold', fontSize: 12.5, color: C.inkDeep } },
+  ], { x: G.M + 0.26, y: fy + 0.22, w: G.contentW - 0.5, h: 0.34 });
+
+  // a worked example on one server
+  const ex = 2.88, exW = 6.1;
+  K.card(s, { x: G.M, y: ex, w: exW, h: 1.78, fill: C.white });
+  K.text(s, 'ONE SERVER, THREE ROWS ON THE LIST', {
+    x: G.M + 0.3, y: ex + 0.24, w: exW - 0.6, h: 0.22, ...T.micro, color: C.red,
+  });
+  const items = [
+    ['March patch', 'for flaw 1', false],
+    ['June patch', 'for flaw 2', false],
+    ['September patch', 'for flaw 3', true],
   ];
-  const sw = 3.62, sgap = (G.contentW - sw * 3) / 2, sy = 2.2, sh = 1.62;
+  items.forEach(([t, d, keep], i) => {
+    const y = ex + 0.56 + i * 0.34;
+    K.text(s, keep ? '✓' : '—', {
+      x: G.M + 0.3, y, w: 0.24, h: 0.26,
+      fontFace: 'Montserrat SemiBold', fontSize: 12, color: keep ? C.red : C.hair,
+    });
+    K.text(s, [
+      { text: t, options: { fontFace: keep ? 'Montserrat SemiBold' : 'Montserrat', fontSize: 12, color: keep ? C.inkDeep : C.muted } },
+      { text: `   ${d}`, options: { fontFace: 'Montserrat', fontSize: 11, color: C.muted } },
+    ], { x: G.M + 0.6, y, w: exW - 0.9, h: 0.26 });
+  });
+  K.text(s, 'September already contains March and June — one action, not three.', {
+    x: G.M + 0.3, y: ex + 1.44, w: exW - 0.6, h: 0.26,
+    fontFace: 'Montserrat SemiBold', fontSize: 11, color: C.red,
+  });
+
+  // the result
+  const x0 = 7.4, w = G.W - G.M - x0;
+  const stats = [
+    { v: P.fixActions, l: 'rows on Kevlar’s list', tone: 'plain' },
+    { v: P.tickets, l: 'tickets actually opened', tone: 'red' },
+    { v: P.reduction, l: 'fewer — 163 absorbed', tone: 'red' },
+  ];
+  const sw = (w - 0.24 * 2) / 3;
   stats.forEach((st, i) => {
-    const x = G.M + i * (sw + sgap);
+    const x = x0 + i * (sw + 0.24);
     const red = st.tone === 'red';
-    K.card(s, { x, y: sy, w: sw, h: sh, fill: red ? C.redTint : C.card, line: red ? C.red : C.hairLight });
+    K.card(s, { x, y: ex, w: sw, h: 1.78, fill: red ? C.redTint : C.card, line: red ? C.red : C.hairLight });
     K.text(s, st.v, {
-      x: x + 0.24, y: sy + 0.2, w: sw - 0.48, h: 0.74, align: 'center',
-      fontFace: 'Montserrat ExtraBold', fontSize: 46, color: red ? C.red : C.inkDeep, charSpacing: -1.8,
+      x: x + 0.14, y: ex + 0.42, w: sw - 0.28, h: 0.7, align: 'center',
+      fontFace: 'Montserrat ExtraBold', fontSize: 40, color: red ? C.red : C.inkDeep, charSpacing: -1.6,
     });
     K.text(s, st.l, {
-      x: x + 0.24, y: sy + 0.98, w: sw - 0.48, h: 0.56, align: 'center',
+      x: x + 0.14, y: ex + 1.2, w: sw - 0.28, h: 0.5, align: 'center',
       ...T.caption, color: C.muted, lineSpacingMultiple: 1.2,
     });
   });
 
-  // waffle: every cell is one real fix-action
-  const wy = 4.16;
-  K.text(s, 'EVERY SQUARE IS ONE ROW IN KEVLAR\u2019S REPORT', {
-    x: G.M, y: wy, w: 7, h: 0.22, ...T.micro, color: C.red,
+  // proportion, one square per row on the list — 46 red, 163 absorbed
+  const wy = 4.88, wafW = 10.4;
+  K.text(s, 'EVERY SQUARE IS ONE ROW ON KEVLAR’S LIST  ·  RED BECAME A TICKET', {
+    x: G.M, y: wy, w: 8, h: 0.22, ...T.micro, color: C.red,
   });
-  const artH = K.placeImage(s, 'chart-consolidation', { x: G.M, y: wy + 0.32, w: G.contentW });
+  K.placeImage(s, 'chart-consolidation', { x: G.M + (G.contentW - wafW) / 2, y: wy + 0.3, w: wafW });
 
-  const ly = wy + 0.42 + artH;
-  K.text(s, '46 opened as tickets', {
-    x: G.M, y: ly, w: 5, h: 0.28,
-    fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.red,
-  });
-  K.text(s, '163 absorbed by a higher build already being installed', {
-    x: G.W - G.M - 6, y: ly, w: 6, h: 0.28, align: 'right',
-    fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.muted,
-  });
-
-  // verification line — the part a security audience cares about
   K.text(s, [
-    { text: 'Zero coverage loss', options: { fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep } },
-    { text: `  —  verified across all ${P.combos} host-and-product combinations, not a sample.`, options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
-  ], { x: G.M, y: 6.4, w: G.contentW, h: 0.3 });
+    { text: 'Nothing was skipped. ', options: { fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep } },
+    { text: ` Checked across all ${P.combos} machine-and-product combinations, not a sample.`, options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
+  ], { x: G.M, y: 6.46, w: G.contentW, h: 0.3 });
 
   return s;
 }

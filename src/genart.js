@@ -44,6 +44,8 @@ function generate() {
     'chart-match': A.chartMatch(),
     'chart-no-action': A.chartNoAction(),
     'chart-consolidation': A.chartConsolidation(),
+    'cumulative-patch': A.cumulativePatch(),
+    'one-flaw-many-patches': A.oneFlawManyPatches(),
     'dashboard-mock': A.dashboardMock(),
   };
 

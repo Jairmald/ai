@@ -114,9 +114,9 @@ distorted.
 16. **Divider — Project 03**
 17. CVE-to-Patch — the problem (117 flaws, manual baseline)
 18. CVE-to-Patch — two days of work to twelve seconds
-19. CVE-to-Patch — 52 of the 117 needed no action
-20. CVE-to-Patch — where 209 came from, and the rule that collapses it
-21. CVE-to-Patch — the payoff (209 rows to 46 tickets)
+19. CVE-to-Patch — 52 of the 117 were already fixed (the cumulative-update fact)
+20. CVE-to-Patch — why 65 flaws turn into 209 rows
+21. CVE-to-Patch — 209 rows became 46 tickets (the same fact, per machine)
 22. CVE-to-Patch — what comes next (dashboard as optional follow-up)
 23. Thank You — closing
 
@@ -139,9 +139,16 @@ The numbers in this section are easy to get subtly wrong. What each one means:
   only 65 were genuinely outstanding.
 - **209** — came from Kevlar's own KB Priority tab. It was **found, not
   derived here**. The contribution was collapsing it, not discovering it.
+  It is the **65 open flaws** split out per Windows version, not the 117.
 - **2,658** — real host-and-product combinations. The chain is
   2,658 assignments → grouped by Kevlar into 209 rows → collapsed to 46.
 - **78%** — measured against Kevlar's 209, not against the 117.
+
+The whole section rests on one fact, stated on slide 19 and reused on 21:
+**Windows updates are cumulative**, so the newest one already contains every
+earlier fix. That is why 52 needed no action (fleet-wide) and why 209 rows
+collapse to 46 (per machine). Do not cut it — without it neither number
+makes sense.
 
 ## AEGIS accuracy
 

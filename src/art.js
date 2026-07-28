@@ -395,6 +395,90 @@ function chartConsolidation() {
 // Slide 17 — unified dashboard mockup
 // ---------------------------------------------------------------------------
 /**
+ * The one fact that explains the whole CVE story: Windows updates are
+ * cumulative, so the newest one already contains every earlier fix for that
+ * same version. Drawn as three stacked patches where each later bar visibly
+ * swallows the ones before it.
+ */
+function cumulativePatch(w = 940, h = 236) {
+  const labX = 132, barX = 154, barR = w - 26;
+  const seg = (barR - barX) / 3;
+  const rowH = 44, gap = 15, top = 24;
+
+  const months = [
+    { name: 'March', fills: ['#EFD6DB'] },
+    { name: 'June', fills: ['#EFD6DB', '#D8A2AE'] },
+    { name: 'September', fills: ['#EFD6DB', '#D8A2AE', hex(C.red)] },
+  ];
+  const segLabels = ['March fixes', 'June fixes', 'September fixes'];
+
+  let out = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`;
+
+  months.forEach((m, r) => {
+    const y = top + r * (rowH + gap);
+    const newest = r === months.length - 1;
+    out += `<text x="${labX}" y="${y + rowH / 2 + 5}" text-anchor="end"
+              font-family="Montserrat ${newest ? 'SemiBold' : 'Medium'}, Montserrat" font-size="15"
+              fill="${newest ? hex(C.inkDeep) : hex(C.muted)}">${m.name}</text>`;
+    m.fills.forEach((f, i) => {
+      const x = barX + i * seg;
+      out += `<rect x="${x}" y="${y}" width="${seg - 3}" height="${rowH}" rx="5" fill="${f}"/>`;
+      out += `<text x="${x + (seg - 3) / 2}" y="${y + rowH / 2 + 5}" text-anchor="middle"
+                font-family="Montserrat Medium, Montserrat" font-size="12.5"
+                fill="${i === 2 ? '#FFFFFF' : hex(C.ink)}">${segLabels[i]}</text>`;
+    });
+    if (newest) {
+      out += `<rect x="${barX - 5}" y="${y - 5}" width="${seg * 3 + 4}" height="${rowH + 10}" rx="8"
+                fill="none" stroke="${hex(C.redDeep)}" stroke-width="2.5"/>`;
+    }
+  });
+
+  const lastY = top + 2 * (rowH + gap) + rowH;
+  out += `<text x="${barX}" y="${lastY + 32}" font-family="Montserrat SemiBold, Montserrat"
+            font-size="15" fill="${hex(C.red)}">Install September and you already have March and June.</text>`;
+  return out + `</svg>`;
+}
+
+/**
+ * Why one flaw turns into several rows: the same flaw needs a differently
+ * numbered patch on each version of Windows in the fleet.
+ */
+function oneFlawManyPatches(w = 780, h = 300) {
+  const boxW = 250, boxH = 56, rightX = w - boxW - 20;
+  const rows = ['Windows 10', 'Windows 11', 'Windows Server'];
+  const rowGap = 34, top = 44;
+  const cyLeft = h / 2 - 22;
+
+  let out = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`;
+
+  // the single flaw
+  out += `<rect x="16" y="${cyLeft - 44}" width="200" height="88" rx="9" fill="${hex(C.red)}"/>
+          <text x="116" y="${cyLeft - 8}" text-anchor="middle" font-family="Montserrat ExtraBold, Montserrat"
+                font-size="26" fill="#FFFFFF">1 flaw</text>
+          <text x="116" y="${cyLeft + 20}" text-anchor="middle" font-family="Montserrat Medium, Montserrat"
+                font-size="13" fill="#EFD6DB">on the list</text>`;
+
+  rows.forEach((r, i) => {
+    const y = top + i * (boxH + rowGap);
+    const cy = y + boxH / 2;
+    out += `<path d="M 224 ${cyLeft} C 300 ${cyLeft}, ${rightX - 90} ${cy}, ${rightX - 22} ${cy}"
+              fill="none" stroke="${hex(C.red)}" stroke-width="2.4" opacity="0.85"/>
+            <path d="M ${rightX - 8} ${cy} L ${rightX - 21} ${cy - 6} L ${rightX - 21} ${cy + 6} Z" fill="${hex(C.red)}"/>`;
+    out += `<rect x="${rightX}" y="${y}" width="${boxW}" height="${boxH}" rx="8"
+              fill="${hex(C.card)}" stroke="${hex(C.hairLight)}" stroke-width="1.4"/>
+            <rect x="${rightX}" y="${y}" width="4" height="${boxH}" rx="2" fill="${hex(C.red)}"/>
+            <text x="${rightX + 20}" y="${cy - 3}" font-family="Montserrat SemiBold, Montserrat"
+                  font-size="15" fill="${hex(C.inkDeep)}">${r}</text>
+            <text x="${rightX + 20}" y="${cy + 17}" font-family="Montserrat Medium, Montserrat"
+                  font-size="12" fill="${hex(C.muted)}">needs its own patch number</text>`;
+  });
+
+  out += `<text x="16" y="${h - 12}" font-family="Montserrat SemiBold, Montserrat"
+            font-size="14" fill="${hex(C.red)}">One flaw, three Windows versions = three rows in the list.</text>`;
+  return out + `</svg>`;
+}
+
+/**
  * Slide 22 — concept dashboard. Shows the two views the team actually wants:
  * SLA remediation (are we fixing things inside the deadline each severity
  * sets?) and patching status (how much of the fleet is actually current?).
@@ -497,4 +581,5 @@ function dashboardMock(w = 900, h = 540) {
 module.exports = {
   redPanel, slashMark, hairTexture, logo, isoMachine,
   supplyChain, chartPackages, chartMatch, chartNoAction, chartConsolidation, dashboardMock,
+  cumulativePatch, oneFlawManyPatches,
 };
