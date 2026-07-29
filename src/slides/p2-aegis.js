@@ -272,25 +272,32 @@ function pipeline(pptx) {
 }
 
 // ---------------------------------------------------------------------------
-// 13 — Proving it works. The verification story a security audience wants.
+// 13 — A real run, framed by what the team has to do about it.
+//
+// An earlier version of this slide gave "2 could not be proven either way" its
+// own card, which read to a business audience as a failed test. The honest
+// finding has not changed — it is simply no longer the headline, because it
+// does not change the work: all three remaining findings are the same Angular
+// version bump, so being unable to rule two of them out costs nothing. The
+// caveat now sits in the closing band, where it reads as discipline.
 // ---------------------------------------------------------------------------
 function proving(pptx) {
   const V = P.verification;
   const s = K.contentSlide(pptx, {
     eyebrow: 'Project 02  ·  A Real Run',
-    title: '1,518 packages, 28 real flaws, nothing guessed',
+    title: '28 flagged. 25 need nothing. 3 are one upgrade.',
     section: 'AEGIS',
     num: 14,
   });
 
   K.text(s, [
-    { text: 'Not a test project — the ', options: { fontFace: 'Montserrat Medium', fontSize: 14, color: C.muted } },
+    { text: 'A read-only scan of the ', options: { fontFace: 'Montserrat Medium', fontSize: 14, color: C.muted } },
     { text: V.repo, options: { fontFace: 'Montserrat SemiBold', fontSize: 14, color: C.inkDeep } },
-    { text: ' repository. Every flaw is genuine, pulled live.', options: { fontFace: 'Montserrat Medium', fontSize: 14, color: C.muted } },
+    { text: ' repository. Real code, real flaws, pulled live.', options: { fontFace: 'Montserrat Medium', fontSize: 14, color: C.muted } },
   ], { x: G.M, y: 2.14, w: 11.4, h: 0.34 });
 
   // the funnel: what went in, what came back, what needs a person
-  const fw = 3.62, fgap = (G.contentW - fw * 3) / 2, fy = 2.66, fh = 1.32;
+  const fw = 3.62, fgap = (G.contentW - fw * 3) / 2, fy = 2.6, fh = 1.16;
   V.funnel.forEach(([v, l], i) => {
     const x = G.M + i * (fw + fgap);
     const isLast = i === 2;
@@ -299,54 +306,58 @@ function proving(pptx) {
       fill: isLast ? C.redTint : C.card, line: isLast ? C.red : C.hairLight,
     });
     K.text(s, v, {
-      x: x + 0.2, y: fy + 0.22, w: fw - 0.4, h: 0.62, align: 'center',
-      fontFace: 'Montserrat ExtraBold', fontSize: 38, color: isLast ? C.red : C.inkDeep, charSpacing: -1.4,
+      x: x + 0.2, y: fy + 0.16, w: fw - 0.4, h: 0.58, align: 'center',
+      fontFace: 'Montserrat ExtraBold', fontSize: 34, color: isLast ? C.red : C.inkDeep, charSpacing: -1.2,
     });
     K.text(s, l, {
-      x: x + 0.2, y: fy + 0.9, w: fw - 0.4, h: 0.3, align: 'center',
+      x: x + 0.2, y: fy + 0.78, w: fw - 0.4, h: 0.28, align: 'center',
       ...T.caption, color: C.muted,
     });
     if (i < 2) {
       K.text(s, '›', {
-        x: x + fw + fgap / 2 - 0.2, y: fy + 0.42, w: 0.4, h: 0.46,
+        x: x + fw + fgap / 2 - 0.2, y: fy + 0.36, w: 0.4, h: 0.46,
         align: 'center', valign: 'middle',
         fontFace: 'Montserrat', fontSize: 26, color: C.hair, bold: true,
       });
     }
   });
 
-  // what the 28 actually resolved to
-  const rw = 5.66, rgap = 0.31, ry = 4.3, rh = 1.5;
-  V.results.forEach(([t, d], i) => {
-    const x = G.M + i * (rw + rgap);
-    const honest = i === 1;
-    K.card(s, { x, y: ry, w: rw, h: rh, fill: C.white, line: honest ? C.red : C.hairLight });
-    s.addShape('rect', {
-      x, y: ry, w: rw, h: 0.05,
-      fill: { color: honest ? C.red : C.hair }, line: { type: 'none' },
-    });
+  // what the team actually does with the result
+  K.text(s, 'WHAT THAT MEANS FOR THE TEAM', {
+    x: G.M, y: 4.02, w: 6, h: 0.22, ...T.micro, color: C.muted,
+  });
+
+  const bars = [C.hair, C.red, C.ink];
+  const ow = (G.contentW - 0.3 * 2) / 3, oy = 4.3, oh = 1.42;
+  V.outcomes.forEach(([t, d], i) => {
+    const x = G.M + i * (ow + 0.3);
+    K.card(s, { x, y: oy, w: ow, h: oh, fill: C.white });
+    s.addShape('rect', { x, y: oy, w: ow, h: 0.05, fill: { color: bars[i] }, line: { type: 'none' } });
     K.text(s, t, {
-      x: x + 0.32, y: ry + 0.28, w: rw - 0.64, h: 0.3,
-      fontFace: 'Montserrat SemiBold', fontSize: 13.5, color: C.inkDeep,
+      x: x + 0.28, y: oy + 0.24, w: ow - 0.56, h: 0.28,
+      fontFace: 'Montserrat ExtraBold', fontSize: 14.5, color: C.inkDeep, charSpacing: -0.2,
     });
     K.text(s, d, {
-      x: x + 0.32, y: ry + 0.64, w: rw - 0.64, h: 0.74,
-      ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.22,
+      x: x + 0.28, y: oy + 0.58, w: ow - 0.56, h: 0.8,
+      fontFace: 'Montserrat', fontSize: 9.5, color: C.muted, lineSpacingMultiple: 1.2,
     });
   });
 
-  // the qualifiers a security audience will want
-  let ny = 6.02;
-  V.notes.forEach((n) => {
-    s.addShape('ellipse', {
-      x: G.M + 0.02, y: ny + 0.07, w: 0.08, h: 0.08,
-      fill: { color: C.red }, line: { type: 'none' },
-    });
-    K.text(s, n, {
-      x: G.M + 0.24, y: ny, w: G.contentW - 0.24, h: 0.24,
-      fontFace: 'Montserrat', fontSize: 10.5, color: C.muted,
-    });
-    ny += 0.25;
+  // the payoff line, with the honest caveat kept underneath it rather than
+  // given equal billing
+  const by = 5.86, bh = 0.86;
+  s.addShape('roundRect', {
+    x: G.M, y: by, w: G.contentW, h: bh, rectRadius: 0.06,
+    fill: { color: C.redTint }, line: { type: 'none' },
+  });
+  s.addShape('rect', { x: G.M, y: by, w: 0.055, h: bh, fill: { color: C.red }, line: { type: 'none' } });
+  K.text(s, V.impact, {
+    x: G.M + 0.26, y: by + 0.11, w: G.contentW - 0.55, h: 0.28,
+    fontFace: 'Montserrat SemiBold', fontSize: 13, color: C.inkDeep,
+  });
+  K.text(s, V.honesty, {
+    x: G.M + 0.26, y: by + 0.42, w: G.contentW - 0.55, h: 0.4,
+    fontFace: 'Montserrat', fontSize: 9.5, color: C.ink, lineSpacingMultiple: 1.18,
   });
 
   s.addNotes(NOTES.p2Proving);

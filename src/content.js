@@ -104,24 +104,29 @@ const PROJECTS = {
 
     // A real run against a Stewart repository — supersedes the earlier
     // synthetic test. Figures come straight from the AEGIS report.
+    //
+    // The slide is built around the outcome rather than around proof quality.
+    // All three remaining findings are Angular packages sitting on 20.3.18 and
+    // fixed by the same move to 20.3.22, so the two the tool could not rule out
+    // do not change the work at all — which is what makes the honesty
+    // affordable rather than a caveat.
     verification: {
       repo: 'Stewart.STEPS.Frontend',
       funnel: [
         ['1,518', 'packages scanned'],
         ['28', 'carrying a known flaw'],
-        ['3', 'needing a human decision'],
+        ['3', 'left needing a decision'],
       ],
-      results: [
-        ['25 confirmed not called by our code',
-         'Dev and build tooling, resolved with a real code parser rather than a text search — so this is a confident answer, not a guess.'],
-        ['2 could not be proven either way',
-         'Both actively used by the app. AEGIS reported them as unproven rather than safe — the exact behaviour it exists to have.'],
+      outcomes: [
+        ['25 need nothing',
+         'Build and development tooling the app never calls. AEGIS read the code to establish that, so it is an answer rather than an assumption.'],
+        ['3 are one upgrade',
+         'All three are Angular, all three sit on version 20.3.18, and all three are fixed by moving to 20.3.22. One version bump, not three pieces of work.'],
+        ['Verified, not hoped for',
+         'The repository\'s own test suite runs, so the upgrade can be proven safe before it ships. Nothing on the list is a breaking change.'],
       ],
-      notes: [
-        'None of the 28 are on the US government\'s actively-exploited list.',
-        'All three needing a decision have a non-breaking upgrade available, and the repo\'s own tests can verify it.',
-        'The scan was read-only. Nothing in the repository was changed.',
-      ],
+      impact: 'An ordinary scanner hands the team 28 findings to triage. This run handed them one upgrade.',
+      honesty: 'Two of the three could not be ruled out, and AEGIS kept them on the list rather than calling them safe — but the same upgrade covers them, so the caution costs nothing. None of the 28 appear on the US government\'s actively-exploited list.',
     },
 
     next: [
@@ -173,7 +178,7 @@ const OUTCOMES = [
   ['Machines could ship without their security baseline.',
    'Nine required tools named, owners assigned, and a written framework staged for Q4 sign-off.'],
   ['Attackers hide malicious code inside the open-source packages we depend on.',
-   'AEGIS built, its safety rails tested, and run for real: 1,518 packages in a Stewart repository down to 3 needing a decision.'],
+   'AEGIS built, its safety rails tested, and run for real: 1,518 packages in a Stewart repository down to a single upgrade.'],
   ['Matching every tracked flaw to its patch took about two days of analyst time.',
    '117 matched in ~12 seconds, and 209 rows collapsed to 46 tickets with nothing skipped.'],
 ];
@@ -218,7 +223,7 @@ const EXEC = [
   {
     problem: 'Attackers hide malicious code inside the open-source packages we depend on.',
     solution: 'AEGIS — a scanner that checks whether our code actually reaches the flaw.',
-    proof: '1,518 packages scanned in a real Stewart repository, 3 needing a decision',
+    proof: '1,518 packages scanned in a real Stewart repository, down to one upgrade',
   },
   {
     problem: 'Matching every tracked flaw to its patch took about two days of analyst time.',
@@ -238,7 +243,7 @@ const NOTES = {
   p2Problem: 'Plain version: someone poisons a popular free software package, and everyone who installs it gets the poison too. It has happened repeatedly in the last two years.',
   p2Built: 'Q: Can AEGIS catch zero-days? — No. It catches publicly known flaws in open-source dependencies. Zero-days need different tooling entirely. Q: What about false positives? — Every finding it labels reachable is a real code path; anything it cannot confirm is labelled "can\'t prove", never "safe". I have not measured a false-positive rate, so I am not going to quote one.',
   p2Pipeline: 'The point of the split: stages 00 to 03 only read. They cannot edit a file, open a pull request or touch a branch, so running AEGIS on a repository can never break it. Stage 04 is the only one that writes, and it will not start without someone asking for it. Q: What stops it running away with a fix? — It does one approved step at a time, refuses protected branches, never merges, and never marks its own work resolved.',
-  p2Proving: 'The short version: it found real flaws in a real Stewart repository, and where it could not be certain it said so rather than guessing. Q: Why "can\'t prove" and not yes or no? — AEGIS has a hand-curated list of about nine packages where the exact dangerous function is documented. Angular is not on it yet, so the tool can confirm the app uses the package but not whether the vulnerable function specifically is called. That is a known limitation, not a bug, and it is why those two need a person. Earlier, testing against an open-source project, I also found and fixed two bugs in my own code — one where a "can\'t prove" result was being described as a confirmed absence.',
+  p2Proving: 'Land the last line: 28 findings became one upgrade. Q: You said two could not be ruled out — so the tool failed on those? — No, and it costs nothing here. AEGIS has a hand-curated list of about nine packages where the exact dangerous function is documented; Angular is not on it yet, so it can confirm the app uses the package but not that the vulnerable function specifically is called. It said so instead of calling them safe. All three findings are the same Angular version bump, so the decision is identical either way. Q: Would you ship that upgrade? — Yes: it is in-range, non-breaking, and the repo\'s test suite runs, so it can be proven before it merges. Q: Was anything confirmed reachable? — No. Nothing was confirmed reachable and nothing was confirmed reaching production. Q: How do you know the 25 are really clear? — Read with a real code parser, not a text search, so it is a structural answer rather than string matching. Earlier, testing against an open-source project, I also found and fixed two bugs in my own code — one where a "can\'t prove" result was being described as a confirmed absence.',
   p2Next: 'Q: Who maintains this after I leave? — The Vulnerability Management team. It is packaged as a plugin so it installs with one command, though that install flow still needs a real run.',
   p3Problem: 'Q: Why 117 and not more? — Because that is the filtered set: high or critical severity AND directly affecting business operations. It is not a sample and it is not everything Kevlar sees.',
   p3Match: 'The ~17.5 hour baseline is a reasoned estimate at 8-10 minutes per flaw, not a stopwatch measurement. Say so if asked. If precision matters, have an analyst time a sample of ten.',

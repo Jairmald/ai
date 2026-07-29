@@ -147,7 +147,7 @@ distorted.
 11. AEGIS — the problem (supply-chain attacks)
 12. AEGIS — what I built (the shift in framing, and the three answers by name)
 13. AEGIS — the five stages
-14. AEGIS — a real run (1,518 packages, 28 flaws, 3 decisions)
+14. AEGIS — a real run (28 flagged, 25 need nothing, 3 are one upgrade)
 15. AEGIS — what comes next
 16. **Divider — Project 03**
 17. CVE-to-Patch — the problem (117 flaws, manual baseline)
@@ -160,7 +160,7 @@ distorted.
 24. Thank You — closing
 
 Speaker notes carrying likely Q&A answers are attached to slides 5, 7, 9, 11,
-12, 14, 15, 17, 18, 19, 20 and 22.
+12, 13, 14, 15, 17, 18, 19, 20 and 22.
 
 ## CVE-to-Patch accuracy
 
@@ -206,12 +206,26 @@ Things the section is careful about, because a security audience will ask:
   Of the 28: 25 are confirmed not called by our code, 2 came back "can't
   prove". Those figures come straight from the scan report — do not round them
   and do not blend them with the 5,675.
-- The **2 "can't prove" findings are the point, not a shortfall.** Both are
-  Angular packages the app genuinely uses. AEGIS knows the exact dangerous
-  function for only about nine packages; Angular is not one of them yet, so it
-  can confirm the package is used but not that the vulnerable function is
-  reached. It said "unproven" rather than "safe" — that is the tool's core rule
-  working. Never present those two as a false-positive rate or as a failure.
+- The **2 "can't prove" findings must not be given their own headline.** An
+  earlier version of slide 14 put them on a card reading "2 could not be proven
+  either way", which a business audience reads as a failed test. The finding is
+  unchanged and still stated — it just is not the frame. Both are Angular
+  packages the app genuinely uses; AEGIS knows the exact dangerous function for
+  only about nine packages, Angular is not one of them yet, so it can confirm
+  the package is used but not that the vulnerable function is reached. It said
+  "unproven" rather than "safe", which is the core rule working. Never present
+  those two as a false-positive rate or as a failure.
+- **The reason the caution is affordable, and the slide's whole argument:** all
+  three remaining findings are Angular packages on `20.3.18`, and all three are
+  fixed by the same move to `20.3.22`. Being unable to rule two of them out
+  changes nothing about the work — it is one version bump either way. That is
+  why slide 14 is organised as *28 flagged / 25 need nothing / 3 are one
+  upgrade* rather than by proof quality. If the underlying scan ever changes so
+  that the three no longer share a fix, this framing has to be rebuilt, not
+  patched.
+- Nothing was **confirmed reachable** and nothing was confirmed reaching
+  production. Worth saying out loud; it is not the same claim as "we are not
+  exposed", and it should not be upgraded into one.
 - **Live flaw-database lookups worked on this run.** The earlier "not yet
   proven on the corporate network" caveat is out of date as a blanket
   statement; what remains true is that the lookups still fail on networks where
