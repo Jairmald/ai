@@ -102,33 +102,33 @@ const PROJECTS = {
 
     honestyRule: 'Unknown is never reported as safe. If AEGIS cannot tell, it says so.',
 
+    // A real run against a Stewart repository — supersedes the earlier
+    // synthetic test. Figures come straight from the AEGIS report.
     verification: {
-      packages: '733',
-      bugs: '2',
-      repo: 'a real open-source project',
-      points: [
-        ['Tested end to end, not just reviewed',
-         'Ran the whole pipeline against a real open-source project and read all 733 packages out of its lockfile.'],
-        ['It failed loudly, which is the point',
-         'When the company network blocked the flaw-database lookup, SCAN reported an error instead of reporting "clean."'],
-        ['It refused to guess',
-         'Forced onto its weakest analysis method, REACH answered "can\'t prove" rather than calling anything safe.'],
-        ['The safety rails hold',
-         'FIX refused to run without explicit approval, and refused to touch a protected branch even once approved.'],
+      repo: 'Stewart.STEPS.Frontend',
+      funnel: [
+        ['1,518', 'packages scanned'],
+        ['28', 'carrying a known flaw'],
+        ['3', 'needing a human decision'],
       ],
-      bugsFixed: [
-        ['An honesty bug in my own code',
-         'A "can\'t prove" result was being described as if the flaw had been confirmed absent. Now the three answers stay distinct.'],
-        ['A reporting bug',
-         'The overall risk tier was read from the wrong place and printed as "Tier ?" in the most common case.'],
+      results: [
+        ['25 confirmed not called by our code',
+         'Dev and build tooling, resolved with a real code parser rather than a text search — so this is a confident answer, not a guess.'],
+        ['2 could not be proven either way',
+         'Both actively used by the app. AEGIS reported them as unproven rather than safe — the exact behaviour it exists to have.'],
+      ],
+      notes: [
+        'None of the 28 are on the US government\'s actively-exploited list.',
+        'All three needing a decision have a non-breaking upgrade available, and the repo\'s own tests can verify it.',
+        'The scan was read-only. Nothing in the repository was changed.',
       ],
     },
 
     next: [
-      ['Unblock the live lookups',
-       'The company security proxy presents a malformed certificate that modern security libraries correctly reject, so the lookups fail. The real fix is an inspection bypass. Meanwhile I built the workaround: the scan splits in two, so the lookup can run from an unblocked network.'],
-      ['Read code structure, not just text',
-       'Reachability currently falls back to searching text. With the right tooling present it reads the code\'s actual structure, which is far more accurate. That still needs a real run.'],
+      ['Teach it the framework packages',
+       'AEGIS knows exactly which function is the dangerous one for about nine packages. Angular is not among them yet — which is why two findings came back "can\'t prove" instead of a straight answer. Extending that list turns those into a verdict.'],
+      ['Keep the live lookups working everywhere',
+       'This run pulled real flaw data live. On networks where the security proxy inspects traffic it still fails, so the split-scan workaround stays until an inspection bypass is in place.'],
       ['Get it into other people\'s hands',
        'Packaged as a plugin so a developer can install it with one command. The install flow itself has not been run start to finish yet.'],
     ],
@@ -237,7 +237,7 @@ const NOTES = {
   p1Next: 'Q: When does this actually get adopted? — Q4, when the policy manager returns. It is drafted and staged for sign-off now, not adopted. Q: Who owns the rollout? — The infrastructure security team; each named team owns its own tool.',
   p2Problem: 'Plain version: someone poisons a popular free software package, and everyone who installs it gets the poison too. It has happened repeatedly in the last two years.',
   p2Built: 'Q: Can AEGIS catch zero-days? — No. It catches publicly known flaws in open-source dependencies. Zero-days need different tooling entirely. Q: What about false positives? — Every finding it labels reachable is a real code path; anything it cannot confirm is labelled "can\'t prove", never "safe". I have not measured a false-positive rate, so I am not going to quote one.',
-  p2Proving: 'This is the slide for the security folks. The short version for everyone else: I tried to make the tool report a clean result it had not earned, and it refused.',
+  p2Proving: 'The short version: it found real flaws in a real Stewart repository, and where it could not be certain it said so rather than guessing. Q: Why "can\'t prove" and not yes or no? — AEGIS has a hand-curated list of about nine packages where the exact dangerous function is documented. Angular is not on it yet, so the tool can confirm the app uses the package but not whether the vulnerable function specifically is called. That is a known limitation, not a bug, and it is why those two need a person. Earlier, testing against an open-source project, I also found and fixed two bugs in my own code — one where a "can\'t prove" result was being described as a confirmed absence.',
   p2Next: 'Q: Who maintains this after I leave? — The Vulnerability Management team. It is packaged as a plugin so it installs with one command, though that install flow still needs a real run.',
   p3Problem: 'Q: Why 117 and not more? — Because that is the filtered set: high or critical severity AND directly affecting business operations. It is not a sample and it is not everything Kevlar sees.',
   p3Match: 'The ~17.5 hour baseline is a reasoned estimate at 8-10 minutes per flaw, not a stopwatch measurement. Say so if asked. If precision matters, have an analyst time a sample of ten.',

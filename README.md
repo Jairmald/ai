@@ -109,7 +109,7 @@ distorted.
 11. AEGIS — the problem (supply-chain attacks)
 12. AEGIS — what I built (reachability, three honest answers)
 13. AEGIS — the five stages
-14. AEGIS — proving it works
+14. AEGIS — a real run (1,518 packages, 28 flaws, 3 decisions)
 15. AEGIS — what comes next
 16. **Divider — Project 03**
 17. CVE-to-Patch — the problem (117 flaws, manual baseline)
@@ -157,11 +157,27 @@ The AEGIS section describes the **current five-stage architecture**: SCAN,
 REACH, BLAST, REGRESS, FIX. An earlier design (FORGE / LEDGER / WATCHTOWER) is
 gone — do not reintroduce it.
 
-Two things the section is careful about, because a security audience will ask:
+Things the section is careful about, because a security audience will ask:
 
 - The **5,675 packages** figure comes from a real production scan by an
   *earlier version* of the tool, and is labelled as such on slides 11 and 12.
   It is not mixed in with the current version's results.
-- The current version's live flaw-database lookups are **not yet proven** on the
-  corporate network, and slide 14 says so plainly. Do not soften that — the
-  tool's own core rule is that unknown is never reported as safe.
+- Slide 14 is the **current** version's evidence, and it is a real run against
+  the `Stewart.STEPS.Frontend` repository, not a synthetic test:
+  **1,518 packages → 28 carrying a known flaw → 3 needing a human decision.**
+  Of the 28: 25 are confirmed not called by our code, 2 came back "can't
+  prove". Those figures come straight from the scan report — do not round them
+  and do not blend them with the 5,675.
+- The **2 "can't prove" findings are the point, not a shortfall.** Both are
+  Angular packages the app genuinely uses. AEGIS knows the exact dangerous
+  function for only about nine packages; Angular is not one of them yet, so it
+  can confirm the package is used but not that the vulnerable function is
+  reached. It said "unproven" rather than "safe" — that is the tool's core rule
+  working. Never present those two as a false-positive rate or as a failure.
+- **Live flaw-database lookups worked on this run.** The earlier "not yet
+  proven on the corporate network" caveat is out of date as a blanket
+  statement; what remains true is that the lookups still fail on networks where
+  the security proxy inspects traffic, which is why the split-scan workaround
+  stays. Slide 15 says exactly that.
+- An earlier synthetic test (733 packages, two bugs found in my own code) is no
+  longer on a slide. It lives in slide 14's speaker notes, where it belongs.

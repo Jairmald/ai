@@ -233,49 +233,76 @@ function pipeline(pptx) {
 function proving(pptx) {
   const V = P.verification;
   const s = K.contentSlide(pptx, {
-    eyebrow: 'Project 02  ·  Proving It Works',
-    title: 'I tried to catch it lying, and it held',
+    eyebrow: 'Project 02  ·  A Real Run',
+    title: '1,518 packages, 28 real flaws, nothing guessed',
     section: 'AEGIS',
     num: 14,
   });
 
-  K.text(s, 'A security tool that quietly reports "clean" when it actually failed is worse than no tool at all. So I tested the failure paths, not just the happy path.', {
-    x: G.M, y: 2.14, w: 11.2, h: 0.36, ...T.lead, color: C.muted,
-  });
+  K.text(s, [
+    { text: 'Not a test project — the ', options: { fontFace: 'Montserrat Medium', fontSize: 14, color: C.muted } },
+    { text: V.repo, options: { fontFace: 'Montserrat SemiBold', fontSize: 14, color: C.inkDeep } },
+    { text: ' repository. Every flaw is genuine, pulled live.', options: { fontFace: 'Montserrat Medium', fontSize: 14, color: C.muted } },
+  ], { x: G.M, y: 2.14, w: 11.4, h: 0.34 });
 
-  // two stat anchors
-  const stats = [[V.packages, 'packages read from a real\nproject\'s lockfile'], [V.bugs, 'real bugs found in my own\ncode, and fixed']];
-  stats.forEach(([v, l], i) => {
-    const x = G.M + i * 2.5;
+  // the funnel: what went in, what came back, what needs a person
+  const fw = 3.62, fgap = (G.contentW - fw * 3) / 2, fy = 2.66, fh = 1.32;
+  V.funnel.forEach(([v, l], i) => {
+    const x = G.M + i * (fw + fgap);
+    const isLast = i === 2;
+    K.card(s, {
+      x, y: fy, w: fw, h: fh,
+      fill: isLast ? C.redTint : C.card, line: isLast ? C.red : C.hairLight,
+    });
     K.text(s, v, {
-      x, y: 2.72, w: 2.3, h: 0.66,
-      fontFace: 'Montserrat ExtraBold', fontSize: 40, color: C.red, charSpacing: -1.4,
+      x: x + 0.2, y: fy + 0.22, w: fw - 0.4, h: 0.62, align: 'center',
+      fontFace: 'Montserrat ExtraBold', fontSize: 38, color: isLast ? C.red : C.inkDeep, charSpacing: -1.4,
     });
     K.text(s, l, {
-      x, y: 3.42, w: 2.3, h: 0.56, ...T.caption, color: C.muted, lineSpacingMultiple: 1.2,
+      x: x + 0.2, y: fy + 0.9, w: fw - 0.4, h: 0.3, align: 'center',
+      ...T.caption, color: C.muted,
     });
+    if (i < 2) {
+      K.text(s, '›', {
+        x: x + fw + fgap / 2 - 0.2, y: fy + 0.42, w: 0.4, h: 0.46,
+        align: 'center', valign: 'middle',
+        fontFace: 'Montserrat', fontSize: 26, color: C.hair, bold: true,
+      });
+    }
   });
 
-  K.hairline(s, { x: G.M, y: 4.22, w: 4.5 });
-  K.text(s, 'The bugs are the interesting part: one was an honesty bug — a "can\'t prove" result was being described as if the flaw had been confirmed absent. Exactly the failure the tool exists to prevent.', {
-    x: G.M, y: 4.42, w: 4.4, h: 1.1, ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.26,
-  });
-
-  // what was actually tested
-  const x0 = 5.86, w = G.W - G.M - x0;
-  K.text(s, 'WHAT I ACTUALLY TESTED', { x: x0, y: 2.66, w, h: 0.22, ...T.micro, color: C.red });
-
-  let y = 2.98;
-  V.points.forEach(([t, d]) => {
-    s.addShape('rect', { x: x0, y: y + 0.06, w: 0.05, h: 0.2, fill: { color: C.red }, line: { type: 'none' } });
+  // what the 28 actually resolved to
+  const rw = 5.66, rgap = 0.31, ry = 4.3, rh = 1.5;
+  V.results.forEach(([t, d], i) => {
+    const x = G.M + i * (rw + rgap);
+    const honest = i === 1;
+    K.card(s, { x, y: ry, w: rw, h: rh, fill: C.white, line: honest ? C.red : C.hairLight });
+    s.addShape('rect', {
+      x, y: ry, w: rw, h: 0.05,
+      fill: { color: honest ? C.red : C.hair }, line: { type: 'none' },
+    });
     K.text(s, t, {
-      x: x0 + 0.2, y, w: w - 0.2, h: 0.26,
-      fontFace: 'Montserrat SemiBold', fontSize: 12, color: C.inkDeep,
+      x: x + 0.32, y: ry + 0.28, w: rw - 0.64, h: 0.3,
+      fontFace: 'Montserrat SemiBold', fontSize: 13.5, color: C.inkDeep,
     });
     K.text(s, d, {
-      x: x0 + 0.2, y: y + 0.28, w: w - 0.24, h: 0.6, ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.2,
+      x: x + 0.32, y: ry + 0.64, w: rw - 0.64, h: 0.74,
+      ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.22,
     });
-    y += 0.95;
+  });
+
+  // the qualifiers a security audience will want
+  let ny = 6.02;
+  V.notes.forEach((n) => {
+    s.addShape('ellipse', {
+      x: G.M + 0.02, y: ny + 0.07, w: 0.08, h: 0.08,
+      fill: { color: C.red }, line: { type: 'none' },
+    });
+    K.text(s, n, {
+      x: G.M + 0.24, y: ny, w: G.contentW - 0.24, h: 0.24,
+      fontFace: 'Montserrat', fontSize: 10.5, color: C.muted,
+    });
+    ny += 0.25;
   });
 
   s.addNotes(NOTES.p2Proving);
@@ -293,7 +320,7 @@ function next(pptx) {
     num: 15,
   });
 
-  K.text(s, 'The pipeline is built and its safety rails are tested. Three things still need a real run before I would call it finished.', {
+  K.text(s, 'Built, safety-rail tested, and already run against a real repository. Three things would take it further.', {
     x: G.M, y: 2.16, w: 11.2, h: 0.36, ...T.lead, color: C.muted,
   });
 
@@ -320,7 +347,7 @@ function next(pptx) {
   // honest status line — kept to one line so it clears the footer rule
   K.text(s, [
     { text: 'Said plainly:', options: { fontFace: 'Montserrat SemiBold', fontSize: 11.5, color: C.inkDeep } },
-    { text: '  the parts that judge risk are built and tested. The parts that depend on the corporate network are not proven yet.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
+    { text: '  it works, and it has been run for real. What is left is widening what it can answer with certainty, and getting it into other hands.', options: { fontFace: 'Montserrat', fontSize: 11.5, color: C.muted } },
   ], { x: G.M, y: 6.38, w: G.contentW, h: 0.3 });
 
   s.addNotes(NOTES.p2Next);
