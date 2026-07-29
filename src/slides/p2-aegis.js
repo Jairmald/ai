@@ -22,11 +22,14 @@ function problem(pptx) {
     num: 11,
   });
 
-  K.text(s, 'In a supply-chain attack, an attacker hides malicious code inside a legitimate, widely-used open-source package. Everyone who installs it inherits the compromise — including us. Real campaigns in 2025 and 2026 worked exactly this way, including a self-spreading family that reused each victim to infect the next.', {
+  K.text(s, 'In a supply-chain attack, an attacker hides malicious code inside a legitimate open-source package. Everyone who installs it inherits the compromise — including us. Real campaigns in 2025 and 2026 worked this way.', {
     x: G.M, y: 2.16, w: 11.4, h: 0.62, ...T.lead, color: C.muted, lineSpacingMultiple: 1.22,
   });
 
-  const artX = 1.28, artW = 10.8, artY = 3.06;
+  // Sized so the art, its stage labels and the callout band all clear each
+  // other: at the full content width the art ran 3.15in tall and pushed the
+  // labels underneath the band, where they were invisible.
+  const artW = 8.5, artX = (G.W - artW) / 2, artY = 2.88;
   const artH = K.placeImage(s, 'supply-chain', { x: artX, y: artY, w: artW });
 
   const stages = [
@@ -38,22 +41,24 @@ function problem(pptx) {
   stages.forEach((st) => {
     const cxc = artX + st.f * artW;
     K.text(s, st.t, {
-      x: cxc - 1.35, y: artY + artH + 0.1, w: 2.7, h: 0.32, align: 'center',
+      // the art carries transparent padding below the last row of cubes, so
+      // the labels are pulled back up into it rather than left floating
+      x: cxc - 1.35, y: artY + artH - 0.26, w: 2.7, h: 0.32, align: 'center',
       ...T.caption, color: C.ink, lineSpacingMultiple: 1.15,
     });
   });
 
-  const gy = 5.62;
+  const gy = 5.84, gh = 0.86;
   s.addShape('roundRect', {
-    x: G.M, y: gy, w: G.contentW, h: 0.94, rectRadius: 0.06,
+    x: G.M, y: gy, w: G.contentW, h: gh, rectRadius: 0.06,
     fill: { color: C.redTint }, line: { type: 'none' },
   });
-  s.addShape('rect', { x: G.M, y: gy, w: 0.055, h: 0.94, fill: { color: C.red }, line: { type: 'none' } });
+  s.addShape('rect', { x: G.M, y: gy, w: 0.055, h: gh, fill: { color: C.red }, line: { type: 'none' } });
   K.text(s, 'WHY EXISTING TOOLS WERE NOT ENOUGH', {
-    x: G.M + 0.26, y: gy + 0.15, w: 8, h: 0.22, ...T.micro, color: C.red,
+    x: G.M + 0.26, y: gy + 0.13, w: 8, h: 0.22, ...T.micro, color: C.red,
   });
   K.text(s, 'Most scanners cry wolf: "you have 500 flaws." But our code never touches most of them, so nobody can tell what is urgent. AEGIS separates signal from noise by checking whether our code actually calls the vulnerable part.', {
-    x: G.M + 0.26, y: gy + 0.41, w: G.contentW - 0.55, h: 0.42,
+    x: G.M + 0.26, y: gy + 0.37, w: G.contentW - 0.55, h: 0.42,
     ...T.bodySm, color: C.ink, lineSpacingMultiple: 1.18,
   });
 
@@ -62,7 +67,15 @@ function problem(pptx) {
 }
 
 // ---------------------------------------------------------------------------
-// 11 — What I built: reachability, three honest answers, production scale.
+// 11 — What I built.
+//
+// Left column states the shift in framing; right column defines the three
+// answers by name. Slide 13 then shows a real run landing in exactly those
+// three buckets, so the vocabulary has to be established here.
+//
+// The 5,675 figure used to be the headline. It is an *earlier version's*
+// number, and leading with it now reads as a step backwards next to slide 13's
+// real 1,518-package run, so it is demoted to a supporting scale fact.
 // ---------------------------------------------------------------------------
 function built(pptx) {
   const s = K.contentSlide(pptx, {
@@ -72,56 +85,86 @@ function built(pptx) {
     num: 12,
   });
 
-  // headline metric — explicitly attributed to the earlier version
-  K.stat(s, {
-    value: P.packagesScanned, label: 'packages scanned in production\nby an earlier version of the tool',
-    x: G.M, y: 2.2, w: 4.3, valueStyle: T.statXL, gap: 1.24,
+  K.text(s, 'Knowing a flawed package is installed is not the same as knowing you are exposed.', {
+    x: G.M, y: 2.16, w: 11.4, h: 0.34, ...T.lead, color: C.muted,
   });
 
-  const bullets = [
-    ['Reachability, not just presence',
-     'Not "you have a flawed package" but "your code actually calls the flawed part".'],
-    ['Three honest answers',
-     'Reachable, no call site found, or can\'t prove. They are never collapsed together into a single "safe".'],
-    ['Unknown is never "safe"',
-     'If the tool cannot tell, it says so. It never reports a clean result it has not earned.'],
+  const colL = G.M, colLW = 5.4;
+  const colR = 6.63, colRW = G.W - G.M - colR;
+
+  // ---- left: the shift in framing -----------------------------------------
+  K.text(s, 'THE SHIFT', { x: colL, y: 2.72, w: 4, h: 0.22, ...T.micro, color: C.muted });
+
+  const shift = [
+    { tag: 'MOST SCANNERS', q: '"This package has a known flaw."',
+      d: 'True, but the list runs to hundreds and everything on it looks equally urgent.',
+      tint: C.card, bar: C.hair, tagColor: C.muted },
+    { tag: 'AEGIS', q: '"Does our code actually call the flawed part?"',
+      d: 'The list collapses to the few that can genuinely be reached — and those get worked first.',
+      tint: C.redTint, bar: C.red, tagColor: C.red },
   ];
-  let by = 3.86;
-  bullets.forEach(([t, d]) => {
-    s.addShape('ellipse', { x: G.M + 0.02, y: by + 0.08, w: 0.12, h: 0.12, fill: { color: C.red }, line: { type: 'none' } });
-    K.text(s, t, {
-      x: G.M + 0.28, y: by, w: 4.1, h: 0.28,
+  shift.forEach((b, i) => {
+    const y = 3.0 + i * 1.35;
+    s.addShape('roundRect', {
+      x: colL, y, w: colLW, h: 1.05, rectRadius: 0.06,
+      fill: { color: b.tint }, line: { type: 'none' },
+    });
+    s.addShape('rect', { x: colL, y, w: 0.055, h: 1.05, fill: { color: b.bar }, line: { type: 'none' } });
+    K.text(s, b.tag, { x: colL + 0.26, y: y + 0.13, w: 3.4, h: 0.2, ...T.micro, color: b.tagColor });
+    K.text(s, b.q, {
+      x: colL + 0.26, y: y + 0.35, w: colLW - 0.5, h: 0.26,
       fontFace: 'Montserrat SemiBold', fontSize: 12.5, color: C.inkDeep,
     });
-    K.text(s, d, {
-      x: G.M + 0.28, y: by + 0.28, w: 4.05, h: 0.6, ...T.bodySm, color: C.muted, lineSpacingMultiple: 1.2,
+    K.text(s, b.d, {
+      x: colL + 0.26, y: y + 0.63, w: colLW - 0.5, h: 0.36,
+      fontFace: 'Montserrat', fontSize: 9.5, color: C.ink, lineSpacingMultiple: 1.16,
     });
-    by += 0.84;
+  });
+  K.connector(s, { x: colL + colLW / 2, y: 4.08, len: 0.24, dir: 'down', color: C.hair, weight: 0.03 });
+
+  // scale, stated as supporting evidence rather than the headline
+  const sy = 5.72;
+  K.hairline(s, { x: colL, y: sy, w: colLW });
+  K.text(s, 'PROVEN AT SCALE', { x: colL, y: sy + 0.16, w: 4, h: 0.2, ...T.micro, color: C.muted });
+  K.text(s, P.packagesScanned, {
+    x: colL, y: sy + 0.38, w: 1.5, h: 0.42,
+    fontFace: 'Montserrat ExtraBold', fontSize: 24, color: C.red, charSpacing: -0.6,
+  });
+  K.text(s, 'packages read in a single production run,\nby an earlier version of the tool.', {
+    x: colL + 1.6, y: sy + 0.4, w: colLW - 1.6, h: 0.42,
+    fontFace: 'Montserrat', fontSize: 10, color: C.muted, lineSpacingMultiple: 1.2,
   });
 
-  // right — validation runs from that earlier version
-  const cardX = 5.66, cardW = G.W - G.M - cardX;
-  K.card(s, { x: cardX, y: 2.26, w: cardW, h: 3.32, fill: C.white });
-  K.text(s, 'PACKAGES SCANNED PER RUN  ·  EARLIER VERSION', {
-    x: cardX + 0.34, y: 2.54, w: cardW - 0.68, h: 0.24, ...T.micro, color: C.red,
+  // ---- right: the three answers, by name ----------------------------------
+  K.text(s, 'THREE HONEST ANSWERS  ·  NEVER COLLAPSED INTO ONE "SAFE"', {
+    x: colR, y: 2.72, w: colRW, h: 0.22, ...T.micro, color: C.red,
   });
-  // sized to sit inside the card, leaving room for the example band below
-  const chartW = 4.66;
-  K.placeImage(s, 'chart-packages', { x: cardX + (cardW - chartW) / 2, y: 2.82, w: chartW });
 
-  // a worked example, so the three answers land as something concrete
-  const ey = 5.76;
-  s.addShape('roundRect', {
-    x: cardX, y: ey, w: cardW, h: 0.96, rectRadius: 0.06,
-    fill: { color: C.redTint }, line: { type: 'none' },
+  const answers = [
+    { name: 'REACHABLE', bar: C.red,
+      d: 'Our code does call the vulnerable part. This one is real exposure, and it gets worked.' },
+    { name: 'NO CALL SITE FOUND', bar: C.hair,
+      d: 'Nothing in our code reaches it. Read with a real code parser rather than a text search, so it is a confident answer.' },
+    { name: 'CAN\'T PROVE', bar: C.ink,
+      d: 'The tool cannot be certain either way — so it says exactly that, and a person makes the call.' },
+  ];
+  answers.forEach((a, i) => {
+    const y = 3.0 + i * 1.17;
+    K.card(s, { x: colR, y, w: colRW, h: 1.05, fill: C.white });
+    s.addShape('rect', { x: colR, y, w: 0.055, h: 1.05, fill: { color: a.bar }, line: { type: 'none' } });
+    K.text(s, a.name, {
+      x: colR + 0.28, y: y + 0.16, w: colRW - 0.5, h: 0.26,
+      fontFace: 'Montserrat ExtraBold', fontSize: 13, color: C.inkDeep, charSpacing: 0.4,
+    });
+    K.text(s, a.d, {
+      x: colR + 0.28, y: y + 0.47, w: colRW - 0.56, h: 0.46,
+      fontFace: 'Montserrat', fontSize: 9.5, color: C.muted, lineSpacingMultiple: 1.16,
+    });
   });
-  s.addShape('rect', { x: cardX, y: ey, w: 0.055, h: 0.96, fill: { color: C.red }, line: { type: 'none' } });
-  K.text(s, 'IN PRACTICE', {
-    x: cardX + 0.26, y: ey + 0.14, w: 4, h: 0.22, ...T.micro, color: C.red,
-  });
-  K.text(s, 'A package we use has a known flaw. AEGIS answers three things: does our code actually call it, how much would be affected, and how risky is the fix. Then the team decides whether it is urgent — instead of guessing.', {
-    x: cardX + 0.26, y: ey + 0.38, w: cardW - 0.5, h: 0.5,
-    fontFace: 'Montserrat', fontSize: 10, color: C.ink, lineSpacingMultiple: 1.2,
+
+  K.text(s, 'The third answer is why the other two can be trusted.', {
+    x: colR, y: 6.5, w: colRW, h: 0.26,
+    fontFace: 'Montserrat SemiBold', fontSize: 10.5, color: C.ink,
   });
 
   s.addNotes(NOTES.p2Built);
@@ -224,6 +267,7 @@ function pipeline(pptx) {
     });
   });
 
+  s.addNotes(NOTES.p2Pipeline);
   return s;
 }
 

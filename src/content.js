@@ -79,7 +79,7 @@ const PROJECTS = {
       },
       {
         n: '01', name: 'REACH', net: 'Analyses local code only',
-        d: 'Finds whether our own code actually calls the vulnerable part — and answers reachable, no call site, or can\'t prove.',
+        d: 'Finds whether our own code calls the vulnerable part — and answers reachable, no call site, or can\'t prove.',
       },
       {
         n: '02', name: 'BLAST', net: 'Analyses local code only',
@@ -173,7 +173,7 @@ const OUTCOMES = [
   ['Machines could ship without their security baseline.',
    'Nine required tools named, owners assigned, and a written framework staged for Q4 sign-off.'],
   ['Attackers hide malicious code inside the open-source packages we depend on.',
-   'AEGIS built and its safety rails tested — five stages, and 5,675 packages scanned in production by an earlier version.'],
+   'AEGIS built, its safety rails tested, and run for real: 1,518 packages in a Stewart repository down to 3 needing a decision.'],
   ['Matching every tracked flaw to its patch took about two days of analyst time.',
    '117 matched in ~12 seconds, and 209 rows collapsed to 46 tickets with nothing skipped.'],
 ];
@@ -218,7 +218,7 @@ const EXEC = [
   {
     problem: 'Attackers hide malicious code inside the open-source packages we depend on.',
     solution: 'AEGIS — a scanner that checks whether our code actually reaches the flaw.',
-    proof: '5,675 packages scanned in production by an earlier version',
+    proof: '1,518 packages scanned in a real Stewart repository, 3 needing a decision',
   },
   {
     problem: 'Matching every tracked flaw to its patch took about two days of analyst time.',
@@ -237,6 +237,7 @@ const NOTES = {
   p1Next: 'Q: When does this actually get adopted? — Q4, when the policy manager returns. It is drafted and staged for sign-off now, not adopted. Q: Who owns the rollout? — The infrastructure security team; each named team owns its own tool.',
   p2Problem: 'Plain version: someone poisons a popular free software package, and everyone who installs it gets the poison too. It has happened repeatedly in the last two years.',
   p2Built: 'Q: Can AEGIS catch zero-days? — No. It catches publicly known flaws in open-source dependencies. Zero-days need different tooling entirely. Q: What about false positives? — Every finding it labels reachable is a real code path; anything it cannot confirm is labelled "can\'t prove", never "safe". I have not measured a false-positive rate, so I am not going to quote one.',
+  p2Pipeline: 'The point of the split: stages 00 to 03 only read. They cannot edit a file, open a pull request or touch a branch, so running AEGIS on a repository can never break it. Stage 04 is the only one that writes, and it will not start without someone asking for it. Q: What stops it running away with a fix? — It does one approved step at a time, refuses protected branches, never merges, and never marks its own work resolved.',
   p2Proving: 'The short version: it found real flaws in a real Stewart repository, and where it could not be certain it said so rather than guessing. Q: Why "can\'t prove" and not yes or no? — AEGIS has a hand-curated list of about nine packages where the exact dangerous function is documented. Angular is not on it yet, so the tool can confirm the app uses the package but not whether the vulnerable function specifically is called. That is a known limitation, not a bug, and it is why those two need a person. Earlier, testing against an open-source project, I also found and fixed two bugs in my own code — one where a "can\'t prove" result was being described as a confirmed absence.',
   p2Next: 'Q: Who maintains this after I leave? — The Vulnerability Management team. It is packaged as a plugin so it installs with one command, though that install flow still needs a real run.',
   p3Problem: 'Q: Why 117 and not more? — Because that is the filtered set: high or critical severity AND directly affecting business operations. It is not a sample and it is not everything Kevlar sees.',

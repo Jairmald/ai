@@ -53,6 +53,44 @@ curl -sSL -o Montserrat.ttf \
 | `src/chrome.js` | Reusable slide furniture — eyebrow, title, rule, cards, footer, logo. |
 | `src/slides/*.js` | One module per section. |
 | `build.js` | Assembles the 24 slides in order. |
+| `tools/one-slide.js` | Builds any slide or run of slides into its own file. |
+| `tools/splice-section.py` | Drops rebuilt slides into a hand-edited deck. |
+
+## Updating the deck that is actually being presented
+
+The working file is edited by hand in PowerPoint between revisions — slides get
+cut, wording gets tightened — so it has drifted from what `build.js` produces
+and a full rebuild would throw those edits away. Updates go in a slide at a
+time instead:
+
+```bash
+node tools/one-slide.js aegis-problem aegis-built aegis-pipeline \
+     aegis-proving aegis-next --name=AEGIS_Section
+
+python3 tools/splice-section.py \
+  --into MAIN.pptx --from out/slides/AEGIS_Section.pptx \
+  --replace 10-12 --out out/merged/MAIN_updated.pptx --renumber
+```
+
+`--replace A-B` is a 1-indexed inclusive range in the target; the source deck's
+slides land at position A and the old A..B are dropped. `--renumber` rewrites
+every footer number to the new running order, which is otherwise the first
+thing to go stale after slides are added or cut.
+
+Two things the splice tool is deliberate about, and which are easy to get wrong
+if it is ever rewritten:
+
+- **Shared parts are edited as bytes, never re-serialised.**
+  `[Content_Types].xml` and `presentation.xml` go through targeted string
+  surgery. Round-tripping them through ElementTree turns the default namespace
+  into a prefixed one — still well-formed XML, but PowerPoint and LibreOffice
+  both refuse to open the result.
+- **Footer renumbering runs afterwards, through python-pptx**, which edits with
+  lxml and so keeps every namespace declaration the original part carried.
+
+Always open the merged file before sending it. `soffice --headless
+--convert-to pdf` failing is the reliable signal that a splice produced a
+package Office will reject, even when python-pptx reads it happily.
 
 ## Brand
 
@@ -107,7 +145,7 @@ distorted.
 9. Image Management Program — what comes next
 10. **Divider — Project 02**
 11. AEGIS — the problem (supply-chain attacks)
-12. AEGIS — what I built (reachability, three honest answers)
+12. AEGIS — what I built (the shift in framing, and the three answers by name)
 13. AEGIS — the five stages
 14. AEGIS — a real run (1,518 packages, 28 flaws, 3 decisions)
 15. AEGIS — what comes next
@@ -181,3 +219,11 @@ Things the section is careful about, because a security audience will ask:
   stays. Slide 15 says exactly that.
 - An earlier synthetic test (733 packages, two bugs found in my own code) is no
   longer on a slide. It lives in slide 14's speaker notes, where it belongs.
+- **Slide 12 no longer leads with 5,675.** Next to slide 14's real 1,518-package
+  run the bigger, older number read as a step backwards, so it is now a
+  supporting "proven at scale" fact and the slide leads with the three answers
+  instead. That is deliberate: slide 12 names REACHABLE / NO CALL SITE FOUND /
+  CAN'T PROVE, and slide 14 then shows a real run landing in exactly those
+  buckets. Cutting either half breaks the other.
+- The summary slide's AEGIS line was updated to match. It used to cite 5,675;
+  it now cites the real run.
