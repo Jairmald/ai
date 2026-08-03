@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jair Maldonado — Information Security Analyst</title>
+<meta name="description" content="Security analyst working on vulnerability management and detection engineering. Lab reports, tooling, and write-ups.">
+
+<meta property="og:title" content="Jair Maldonado — Information Security Analyst">
+<meta property="og:description" content="Vulnerability management and detection engineering. Lab reports, tooling, and write-ups.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jairmald.github.io/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2314161B'/><rect x='7' y='9' width='2' height='14' fill='%234A5160'/><rect x='12' y='9' width='2' height='14' fill='%234A5160'/><rect x='17' y='7' width='2' height='18' fill='%23E3A445'/><rect x='22' y='9' width='2' height='14' fill='%234A5160'/></svg>">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <a class="topbar-mark" href="#top">JM</a>
+  <nav class="topbar-nav" aria-label="Sections">
+    <a href="#approach">Approach</a>
+    <a href="#work">Work</a>
+    <a href="#internship">Internship</a>
+    <a href="#labs">Labs</a>
+    <a href="#community">Community</a>
+  </nav>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch colour theme">
+    <span class="theme-toggle-dot" aria-hidden="true"></span>
+    <span class="theme-toggle-text" id="themeLabel">Auto</span>
+  </button>
+</header>
+
+<main id="main">
+
+<!-- ───────────────────────── hero ───────────────────────── -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow">Information Security Analyst</p>
+    <h1 class="hero-name">Jair<span class="hero-break"> </span>Maldonado</h1>
+    <p class="hero-thesis">
+      I work on the unglamorous half of security: finding what is actually exposed,
+      deciding what genuinely needs fixing, and closing the distance between the two.
+    </p>
+
+    <figure class="triage" aria-labelledby="triageCap">
+      <div class="triage-strip" id="triageStrip" role="img"
+           aria-label="A band of tick marks, most of them muted, a few highlighted — illustrating findings that need action against findings that do not."></div>
+      <figcaption class="triage-cap" id="triageCap">
+        Most findings need no action. The work is knowing which ones do.
+      </figcaption>
+    </figure>
+
+    <ul class="hero-links">
+      <li><a class="btn btn-primary" href="https://github.com/Jairmald">GitHub</a></li>
+      <li><a class="btn" href="https://linkedin.com/in/jairmaldonado">LinkedIn</a></li>
+      <li><a class="btn" href="mailto:jairmyl1@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────────────────── approach ───────────────────────── -->
+<section class="band" id="approach">
+  <div class="wrap grid-split">
+    <div class="col-label">
+      <p class="eyebrow">01 — Approach</p>
+    </div>
+    <div class="col-body">
+      <p class="lede">
+        A scanner that flags everything has told you nothing.
+      </p>
+      <p>
+        Most of what security tooling produces is technically true and practically useless. A
+        dependency scanner reports every package with a published advisory, whether or not your
+        code ever calls the vulnerable function. A vulnerability platform reports every flaw on
+        every host, whether or not one patch closes forty of them at once. The output is accurate
+        and the volume makes it unactionable.
+      </p>
+      <p>
+        The work I find interesting is the reduction — the analysis that turns a list into a
+        decision. That means asking whether vulnerable code is reachable before raising an alarm,
+        and knowing that Windows updates are cumulative so hundreds of findings collapse into a
+        handful of actual patches.
+      </p>
+      <p>
+        It also means being honest about uncertainty. When an analysis cannot prove something is
+        safe, the answer is <em>unproven</em>, not <em>safe</em>. A tool that guesses optimistically
+        to keep its false-positive count down is worse than no tool at all, because the one it
+        guesses wrong on is the one that mattered.
+      </p>
+
+      <ul class="tags" aria-label="Focus areas">
+        <li>Vulnerability management</li>
+        <li>Detection engineering</li>
+        <li>SIEM &amp; log analysis</li>
+        <li>Incident response</li>
+        <li>Cloud security</li>
+        <li>ISO/IEC 27002 &middot; NIST CSF</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── selected work ───────────────────────── -->
+<section class="band band-alt" id="work">
+  <div class="wrap grid-split">
+    <div class="col-label">
+      <p class="eyebrow">02 — Selected work</p>
+    </div>
+    <div class="col-body">
+
+      <article class="project">
+        <header class="project-head">
+          <h2 class="project-title"><a href="https://github.com/Jairmald/sparta-mapper">sparta-mapper</a></h2>
+          <p class="project-meta">Open source &middot; Python &middot; In development</p>
+        </header>
+        <p class="project-pitch">
+          Maps CVEs and vendor security advisories to the Aerospace Corporation's SPARTA
+          space-cyber threat framework, automatically.
+        </p>
+        <p>
+          SPARTA is the space sector's equivalent of MITRE ATT&amp;CK — a shared taxonomy for
+          spacecraft attack techniques, published as a STIX 2.1 bundle. What did not exist was the
+          layer CISA built for ATT&amp;CK with its Decider tool: something that takes a real
+          advisory and tells you which technique it actually is, with reasoning and relevant
+          countermeasures. This is that layer.
+        </p>
+        <p>
+          Embedding search narrows the full technique set to a handful of candidates, then a model
+          classifies against those with structured reasoning. Retrieval first, because a model
+          chooses better between five plausible options than it ranks a hundred.
+        </p>
+        <ul class="chips" aria-label="Technologies">
+          <li>Python</li><li>STIX 2.1</li><li>sentence-transformers</li>
+          <li>SQLite</li><li>FastAPI</li><li>React</li>
+        </ul>
+        <p class="project-note">
+          Accuracy is deliberately unpublished until the labelled eval set is large enough for the
+          number to mean something.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── internship ───────────────────────── -->
+<section class="band" id="internship">
+  <div class="wrap grid-split">
+    <div class="col-label">
+      <p class="eyebrow">03 — Internship</p>
+    </div>
+    <div class="col-body">
+
+      <p class="lede">
+        Information Security Analyst intern at a Fortune-1000 title insurance and real-estate
+        services company.
+      </p>
+      <p>
+        Three rotations across vulnerability management, application security, and endpoint
+        operations. Descriptions below are deliberately generalised — no internal system names,
+        no version numbers, no findings, and figures given as ratios rather than counts.
+      </p>
+
+      <article class="project">
+        <header class="project-head">
+          <h3 class="project-title">Reachability-aware dependency scanning</h3>
+          <p class="project-meta">Design &amp; build</p>
+        </header>
+        <p>
+          Conventional dependency scanners answer <em>does this package have a published
+          advisory?</em> The more useful question is <em>does our code ever call the vulnerable
+          function?</em> I built a scanner that asks the second one.
+        </p>
+        <p>
+          Run against a production frontend codebase of roughly 1,500 dependencies, it flagged a
+          few dozen packages carrying known flaws. Reachability analysis cleared the large majority
+          as never invoked by application code. Everything that survived resolved to a
+          <strong>single minor-version upgrade</strong>.
+        </p>
+        <p>
+          The design decision I am most pleased with is what happens when reachability cannot be
+          proven either way. The tool returns <strong>unproven</strong>, never <em>safe</em>. Some
+          findings came back that way. Because they shared a fix with the findings that were
+          confirmed, the caution cost nothing — it was one version bump either way.
+        </p>
+        <ul class="chips" aria-label="Technologies">
+          <li>Static analysis</li><li>Call-graph reachability</li>
+          <li>Dependency graphs</li><li>Advisory databases</li>
+        </ul>
+      </article>
+
+      <article class="project">
+        <header class="project-head">
+          <h3 class="project-title">Vulnerability-to-patch automation</h3>
+          <p class="project-meta">Design &amp; build</p>
+        </header>
+        <p>
+          A patch cycle began as a filtered export of high and critical severity flaws directly
+          affecting business operations — over a hundred of them — each needing to be cross-checked
+          by hand against what was already deployed. Estimated at eight to ten minutes apiece, that
+          is more than two working days before any patching starts.
+        </p>
+        <p>
+          I automated the cross-reference. <strong>Two days of triage became about twelve
+          seconds.</strong>
+        </p>
+        <p>
+          The finding that made it worth doing: because Windows updates are cumulative, the newest
+          one already contains every earlier fix. Just under half the reported flaws needed no
+          action at all — they were already closed by updates that had shipped. Applying the same
+          fact per machine collapsed the remaining work by <strong>78%</strong>, turning hundreds
+          of individual rows into a few dozen actual patch tickets.
+        </p>
+        <ul class="chips" aria-label="Technologies">
+          <li>Python</li><li>Data reconciliation</li>
+          <li>Patch management</li><li>Reporting automation</li>
+        </ul>
+      </article>
+
+      <article class="project">
+        <header class="project-head">
+          <h3 class="project-title">Endpoint image management</h3>
+          <p class="project-meta">Process design</p>
+        </header>
+        <p>
+          Building and maintaining a standard endpoint image required nine separate tools with no
+          documented order of operations, which meant the process lived in whoever had done it last.
+          I documented the sequence end to end and rebuilt it as a process another analyst could
+          follow without supervision.
+        </p>
+        <ul class="chips" aria-label="Focus">
+          <li>Endpoint management</li><li>Process documentation</li><li>Standardisation</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── labs ───────────────────────── -->
+<section class="band band-alt" id="labs">
+  <div class="wrap grid-split">
+    <div class="col-label">
+      <p class="eyebrow">04 — Lab work</p>
+    </div>
+    <div class="col-body">
+
+      <p class="lede">
+        Thirty-seven hands-on technical write-ups across security operations, cloud, and
+        competition.
+      </p>
+      <p>
+        Each follows the same structure — objectives, tooling, procedure, results, and a
+        <em>challenges</em> section recording what went wrong. That last part is the reason they
+        are worth reading. A write-up where everything worked first time is a write-up that has
+        been edited into uselessness.
+      </p>
+
+      <div class="labs">
+
+        <section class="labgroup">
+          <h3 class="labgroup-title">Detection &amp; monitoring <span class="count">6</span></h3>
+          <ul class="lablist">
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Enterprise-SIEM-Infrastructure-Deployment">Enterprise SIEM deployment</a> <span class="lab-note">ELK Stack, Fleet integration</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Security%20Monitoring%20%26%20SIEM%20Fundamentals">Security monitoring fundamentals</a> <span class="lab-note">Elastic Stack detection</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/IDS-Alert-Correlation-and-Threat-Analysis">IDS alert correlation</a> <span class="lab-note">Triage and response</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/SNORT-IDS-Implementation-on-Edge-Hardware">SNORT on edge hardware</a> <span class="lab-note">Raspberry Pi deployment</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Honeypot-Detection-System-Implementation">Honeypot detection system</a> <span class="lab-note">Pentbox, attack analysis</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/AutoSec-Project">AutoSec + CTI pipeline</a> <span class="lab-note">Automated response</span></li>
+          </ul>
+        </section>
+
+        <section class="labgroup">
+          <h3 class="labgroup-title">Incident response &amp; forensics <span class="count">2</span></h3>
+          <ul class="lablist">
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Malware%20Analysis%3A%20Asprox%20Botnet">Asprox botnet analysis</a> <span class="lab-note">Network forensics, C2 detection</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Incident%20Handling%20Lab%20%E2%80%93%20Nexus%20Data%20Breach%20Simulation">Nexus breach simulation</a> <span class="lab-note">SOC containment and recovery</span></li>
+          </ul>
+        </section>
+
+        <section class="labgroup">
+          <h3 class="labgroup-title">Offensive security &amp; assessment <span class="count">5</span></h3>
+          <ul class="lablist">
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Vulnerability%20Assessment">Vulnerability assessment</a> <span class="lab-note">Nessus, OpenVAS</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/SQL-Injection-Vulnerability-Assessment">SQL injection assessment</a> <span class="lab-note">Exploitation and defence</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/IP-Spoofing-and-ICMP-Analysis">Packet sniffing &amp; spoofing</a> <span class="lab-note">Scapy</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Host-File-Attack">Hosts file attack</a> <span class="lab-note">Local DNS spoofing</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Wireless-Wardriving">Wireless wardriving</a> <span class="lab-note">Reconnaissance</span></li>
+          </ul>
+        </section>
+
+        <section class="labgroup">
+          <h3 class="labgroup-title">Infrastructure &amp; hardening <span class="count">4</span></h3>
+          <ul class="lablist">
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/System%20Hardening%2C%20CVE%20Remediation%20%26%20Compliance%20in%20Action">System hardening &amp; CVE remediation</a> <span class="lab-note">Compliance alignment</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Implementing%20a%20Risk%20Mitigation%20Framework">Risk mitigation framework</a> <span class="lab-note">ISO/IEC 27002</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Multi-Server-Systems-Administration">Active Directory build</a> <span class="lab-note">400+ users, GPO, Hyper-V</span></li>
+            <li><a href="https://github.com/Jairmald/Projects-and-Labs/tree/main/Enterprise%20Network%20Infrastructure">Enterprise network infrastructure</a> <span class="lab-note">Cisco, OSPF</span></li>
+          </ul>
+        </section>
+
+        <section class="labgroup">
+          <h3 class="labgroup-title">Cloud &mdash; AWS Cloud Institute <span class="count">19</span></h3>
+          <ul class="lablist">
+            <li><a href="https://github.com/Jairmald/AWS-Cloud-Institute-Projects/tree/main/Monitoring-Security-with-CloudWatch">Security monitoring with CloudWatch</a> <span class="lab-note">Metric filters, SNS alarms</span></li>
+            <li><a href="https://github.com/Jairmald/AWS-Cloud-Institute-Projects/tree/main/IaC-CloudFormation-Remediation">CloudFormation drift remediation</a> <span class="lab-note">Lambda, EventBridge</span></li>
+            <li><a href="https://github.com/Jairmald/AWS-Cloud-Institute-Projects/tree/main/AWS%20Well-Architected%20Tool">Well-Architected review</a> <span class="lab-note">Workload assessment</span></li>
+            <li><a href="https://github.com/Jairmald/AWS-Cloud-Institute-Projects">All 19 AWS labs</a> <span class="lab-note">Development, operations, Linux, AI services</span></li>
+          </ul>
+        </section>
+
+        <section class="labgroup">
+          <h3 class="labgroup-title">Competition <span class="count">1</span></h3>
+          <ul class="lablist">
+            <li><a href="https://github.com/Jairmald/Hackathons-CTF/tree/main/Networks-Security-CTF">Network security CTF</a> <span class="lab-note">Red vs blue, multi-day</span></li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── community ───────────────────────── -->
+<section class="band" id="community">
+  <div class="wrap grid-split">
+    <div class="col-label">
+      <p class="eyebrow">05 — Community</p>
+    </div>
+    <div class="col-body">
+      <div class="orgs">
+        <article class="org">
+          <h3 class="org-name">ISSA</h3>
+          <p class="org-sub">South Texas Chapter &middot; Member</p>
+          <p>
+            Chapter meetings, workshops, and mentoring. The mentoring matters to me: most people
+            trying to enter this field have nobody to ask, and chapter events are one of the few
+            places that gap gets closed.
+          </p>
+        </article>
+        <article class="org">
+          <h3 class="org-name">ACFE</h3>
+          <p class="org-sub">Member &middot; Working toward CFE</p>
+          <p>
+            Fraud examination overlaps with security work more than its reputation suggests. Both
+            are about reconstructing what happened from incomplete evidence, and documenting it
+            well enough that someone else can act on it.
+          </p>
+        </article>
+      </div>
+      <p class="org-link">
+        <a href="https://github.com/Jairmald/Professional-Associations">Read more &rarr;</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── contact ───────────────────────── -->
+<section class="closing" id="contact">
+  <div class="wrap">
+    <p class="eyebrow">06 — Contact</p>
+    <h2 class="closing-title">Open to security analyst and detection engineering roles.</h2>
+    <ul class="hero-links">
+      <li><a class="btn btn-primary" href="mailto:jairmyl1@gmail.com">jairmyl1@gmail.com</a></li>
+      <li><a class="btn" href="https://linkedin.com/in/jairmaldonado">LinkedIn</a></li>
+      <li><a class="btn" href="https://github.com/Jairmald">GitHub</a></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <p>&copy; <span id="year">2026</span> Jair Maldonado</p>
+    <p>South Texas</p>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
