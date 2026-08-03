@@ -131,7 +131,33 @@ teammates. Remove the duplicate.
 
 ---
 
-## 6. MEDIUM — a placeholder is published in the portfolio
+## 6. MEDIUM — unfilled placeholders and four broken images are live
+
+Seven separate spots where template scaffolding was never filled in, or an asset never landed.
+Four of them render as **broken-image icons** on GitHub, which is the most visibly unfinished thing
+a portfolio can do.
+
+### Broken images (render as a broken icon today)
+
+| File | Reference | Problem |
+| --- | --- | --- |
+| `Projects-and-Labs/Incident Handling Lab – Nexus Data Breach Simulation/README.md:127` | `https://placeholder-image-url.com/wazuh-alerts.png` | Domain is fictional |
+| …`:130` | `https://placeholder-image-url.com/sysmon-processes.png` | Domain is fictional |
+| …`:133` | `https://placeholder-image-url.com/thehive-case.png` | Domain is fictional |
+| `AWS-Cloud-Institute-Projects/Resource-Monitoring/README.MD` | `./screenshots/03-email-notification-alert.png` | No `screenshots/` directory exists anywhere in the repo |
+
+The first three sit under headings that announce them — *"Screenshot 1: Wazuh SIEM Alert
+Dashboard"* — so the reader is told to expect an image and then shown a broken icon.
+
+### Unfilled template fields
+
+| File | Line |
+| --- | --- |
+| `Projects-and-Labs/Enterprise Network Infrastructure/README.md:151` | `**Lab Completed:** [Completion Date]` |
+| `AWS-Cloud-Institute-Projects/AWS Well-Architected Tool/README.MD:249` | `**Contact:** [Your Name] \| [Your Email] \| [Your GitHub Profile]` |
+| `AWS-Cloud-Institute-Projects/Resource-Monitoring/README.MD:338` | `**Contact:** [Your Name] \| [Your Email] \| [Your GitHub Profile]` |
+
+### And the one-word file
 
 `Projects-and-Labs/Personal SIEM/README.md` is, in its entirety:
 
@@ -139,8 +165,60 @@ teammates. Remove the duplicate.
 here
 ```
 
-Either write the lab up or remove the folder. A one-word placeholder in a portfolio reads worse
-than an absent project.
+**Fix:** either supply the screenshots or cut the headings that promise them — a write-up with no
+screenshots is fine, a write-up with four broken ones is not. Fill the three template fields. For
+`Personal SIEM`, write it up or remove the folder; a one-word placeholder reads worse than an
+absent project.
+
+---
+
+## 6b. MEDIUM — two AWS lab reports render as plain text, not markdown
+
+Two complete lab write-ups are committed **without a file extension**:
+
+```
+AWS-Cloud-Institute-Projects/File-Ownership-and-Permissions-in-Linux   (220 lines)
+AWS-Cloud-Institute-Projects/Managing-Users-in-Linux                   (245 lines)
+```
+
+Both are full markdown documents — headings, badge rows, tables, the same structure as every other
+lab in the repo. But with no `.md` extension GitHub serves them as **plain text**. The reader sees
+literal `# Managing Users in Linux`, raw `![Lab Report](https://img.shields.io/...)` badge URLs,
+and unrendered table pipes. Roughly 24 KB of good work displayed as source.
+
+They are also loose at the repository root, while the other 17 labs each live in their own folder.
+
+**Fix:** move each into a folder and give it the standard name, matching its siblings:
+
+```bash
+cd AWS-Cloud-Institute-Projects
+mkdir -p File-Ownership-and-Permissions-in-Linux.dir Managing-Users-in-Linux.dir
+git mv File-Ownership-and-Permissions-in-Linux   File-Ownership-and-Permissions-in-Linux.dir/README.md
+git mv Managing-Users-in-Linux                   Managing-Users-in-Linux.dir/README.md
+git mv File-Ownership-and-Permissions-in-Linux.dir File-Ownership-and-Permissions-in-Linux
+git mv Managing-Users-in-Linux.dir                 Managing-Users-in-Linux
+```
+
+(The two-step rename is needed because a file and a directory can't share a name mid-operation.)
+
+---
+
+## 6c. LOW — the AWS lab count is off by one
+
+The README badge reads `Labs-20 Completed` and the course table totals **20**:
+
+| Course | Labs Completed |
+| --- | --- |
+| AWS Developer Fundamentals | 7 |
+| AWS Cloud Operations | 11 |
+| AWS Cloud Fundamentals | 2 |
+| **Total** | **20** |
+
+The repository contains **19** — 17 in folders plus the two extensionless files from §6b.
+
+This may not be an error: you may have completed 20 and written up 19. But a reader who counts
+finds a gap. Either add the missing write-up, or adjust the badge and table to describe what is
+published and note the difference.
 
 ---
 
@@ -149,7 +227,7 @@ than an absent project.
 `Projects` is a six-word stub — *"# Projects / All my cyber projects"* — with one subfolder, whose
 sole piece of content is the duplicate identified in section 5.
 
-`Projects-and-Labs` is the real one: 18 lab reports, several of them substantial.
+`Projects-and-Labs` is the real one: 17 written-up lab reports, several of them substantial.
 
 Two repositories with overlapping names and overlapping purposes force a visitor to guess which is
 the real portfolio. Consolidate into `Projects-and-Labs` and archive `Projects`.
@@ -248,7 +326,7 @@ profile.
 
 ---
 
-## 14. LOW — `Projects-and-Labs` has 18 labs and no index
+## 14. LOW — `Projects-and-Labs` has 17 labs and no index
 
 The README is an introduction with no list of what is in the repository. A visitor has to browse
 the folder tree to discover that there is a malware analysis, a SIEM deployment, a honeypot build,
